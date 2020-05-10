@@ -44,6 +44,8 @@
             <list>
               <option value="clean" />
               <option value="install" />
+              <option value="-U" />
+              <option value="-N" />
             </list>
           </option>
           <option name="pomFileName" />
