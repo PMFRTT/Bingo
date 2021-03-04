@@ -1,7 +1,9 @@
-name: xBingo
+name: Bingo
 version: ${project.version}
 main: bingo.BingoPlugin
 api-version: 1.13
 commands:
   Bingo:
+  Reset:
+  Top:
 depend: [Core]

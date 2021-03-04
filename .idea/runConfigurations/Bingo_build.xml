@@ -3,17 +3,16 @@
     <MavenSettings>
       <option name="myGeneralSettings">
         <MavenGeneralSettings>
-          <option name="alwaysUpdateSnapshots" value="false" />
+          <option name="alwaysUpdateSnapshots" value="true" />
           <option name="checksumPolicy" value="NOT_SET" />
           <option name="failureBehavior" value="NEVER" />
           <option name="localRepository" value="" />
-          <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+          <option name="mavenHome" value="Bundled (Maven 3)" />
           <option name="nonRecursive" value="false" />
           <option name="outputLevel" value="DEBUG" />
           <option name="pluginUpdatePolicy" value="DEFAULT" />
           <option name="printErrorStackTraces" value="true" />
           <option name="threads" />
-          <option name="updateIndicesOnProjectOpen" value="true" />
           <option name="usePluginRegistry" value="true" />
           <option name="userSettingsFile" value="" />
           <option name="workOffline" value="false" />
@@ -25,7 +24,7 @@
           <option name="environmentProperties">
             <map />
           </option>
-          <option name="jreName" value="14" />
+          <option name="jreName" value="15" />
           <option name="mavenProperties">
             <map />
           </option>

@@ -3,6 +3,7 @@ package bingo;
 import java.util.Collection;
 import java.util.HashMap;
 
+import core.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,59 +18,52 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class BingoInventory {
 
-	public static Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+    private static HashMap<String, Inventory> playerInventoryHashMap = new HashMap<String, Inventory>();
 
-	static ItemStack done = new ItemStack(Material.TURTLE_HELMET, 1);
-	static ItemMeta doneMeta = done.getItemMeta();
+    private static ItemStack createItemStack() {
+        ItemStack itemStack = new ItemStack(Material.TURTLE_HELMET, 1);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.GOLD + "Abgeschlossen!");
+        itemMeta.hasEnchants();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
 
-	public static HashMap<Player, Inventory> createInv(Player p) {
+    public static Inventory createInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, "Bingo-Tafel von " + Utils.getDisplayName(player));
+        int i = 0;
+        for (Material material : BingoList.getBingoList(player)) {
+            inventory.setItem(i, new ItemStack(material));
+            i++;
+        }
+        while (i < inventory.getSize()) {
+            inventory.setItem(i, createItemStack());
+            i++;
+        }
+        playerInventoryHashMap.put(player.getDisplayName(), inventory);
+        return inventory;
+    }
 
-		System.out.print("Inv for " + p.getDisplayName() + " created");
-		InventoryHolder owner = p;
-		Inventory inv = Bukkit.createInventory(owner, InventoryType.DISPENSER, "Bingo von " + p.getDisplayName());
-		int size = BingoPlugin.map.get(p.getDisplayName()).size();
-		doneMeta.setDisplayName(ChatColor.GOLD + "Abgeschlossen!");
-		doneMeta.hasEnchants();
-		doneMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		doneMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-		done.setItemMeta(doneMeta);
-		for (int i = 0; i < size; i++) {
-			Material mat = Material.getMaterial(BingoPlugin.map.get(p.getDisplayName()).get(i));
-			if (mat != null) {
-				inv.setItem(i, new ItemStack(mat, 1));
+    public static Inventory getPlayerInventory(Player player) {
+        return playerInventoryHashMap.get(player.getDisplayName());
+    }
 
-			}
+    public static HashMap<String, Inventory> getAllInventories() {
+        return playerInventoryHashMap;
+    }
 
-			else {
-				inv.setItem(i, done);
-			}
-
-		}
-
-		HashMap<Player, Inventory> map = new HashMap<Player, Inventory>();
-		map.put(p, inv);
-		return map;
-	}
-
-
-	public static void updateInventory(HashMap<Player, Inventory> map, Player player) {
-
-		Inventory toEdit = map.get(player);
-		toEdit.clear();
-		;
-		int size = BingoPlugin.map.get(player.getDisplayName()).size();
-		for (int i = 0; i < 9; i++) {
-			if (size > i) {
-				Material mat = Material.getMaterial(BingoPlugin.map.get(player.getDisplayName()).get(i));
-				if (mat != null) {
-					toEdit.setItem(i, new ItemStack(mat, 1));
-				}
-			} else {
-				toEdit.setItem(i, done);
-			}
-		}
-
-		map.put(player, toEdit);
-
-	}
+    public static void updateInventory(Player player) {
+        Inventory inventory = playerInventoryHashMap.get(player.getDisplayName());
+        int i = 0;
+        for (Material material : BingoList.getBingoList(player)) {
+            inventory.setItem(i, new ItemStack(material));
+            i++;
+        }
+        while (i < inventory.getSize()) {
+            inventory.setItem(i, createItemStack());
+            i++;
+        }
+    }
 }

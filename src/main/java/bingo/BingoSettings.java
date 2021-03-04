@@ -30,10 +30,7 @@ public class BingoSettings {
 	
 	public static ItemStack startBingo = new ItemStack(Material.GREEN_DYE, 1);
 	public static ItemMeta startBingoMeta = startBingo.getItemMeta();
-	
-	
-	
-	
+
 
 	public static Inventory Settings = Bukkit.createInventory(null, 27, "Einstellungen");
 
@@ -74,7 +71,6 @@ public class BingoSettings {
 		Settings.setItem(26, startBingo);
 
 		return Settings;
-
 	}
 
 	public static void update() {
