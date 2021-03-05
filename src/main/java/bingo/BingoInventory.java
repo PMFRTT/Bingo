@@ -31,8 +31,8 @@ public class BingoInventory {
         return itemStack;
     }
 
-    public static Inventory createInventory(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, InventoryType.DISPENSER, "Bingo-Tafel von " + Utils.getDisplayName(player));
+    public static Inventory createInventory(Player player, int size) {
+        Inventory inventory = Bukkit.createInventory(null, size, "Bingo-Tafel von " + Utils.getDisplayName(player));
         int i = 0;
         for (Material material : BingoList.getBingoList(player)) {
             inventory.setItem(i, new ItemStack(material));

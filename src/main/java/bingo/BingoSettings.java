@@ -7,97 +7,121 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
+import settings.PluginSettings;
 
-public class BingoSettings {
+import java.util.ArrayList;
 
-	public static ItemStack easy = new ItemStack(Material.LIME_DYE, 1);
-	public static ItemMeta easyMeta = easy.getItemMeta();
+public class BingoSettings extends PluginSettings {
 
-	public static ItemStack medium = new ItemStack(Material.ORANGE_DYE, 1);
-	public static ItemMeta mediumMeta = medium.getItemMeta();
+    private Plugin plugin;
 
-	public static ItemStack hard = new ItemStack(Material.RED_DYE, 1);
-	public static ItemMeta hardMeta = hard.getItemMeta();
-	
-	public static ItemStack keepInventory = new ItemStack(Material.GRAY_DYE);
-	public static ItemMeta keepInventoryMeta = keepInventory.getItemMeta();
-	
-	public static ItemStack enableTimber = new ItemStack(Material.GRAY_DYE);
-	public static ItemMeta enableTimberMeta = enableTimber.getItemMeta();
-	
-	public static ItemStack disableMobs = new ItemStack(Material.LIME_DYE);
-	public static ItemMeta disableMobsMeta = disableMobs.getItemMeta();
-	
-	public static ItemStack startBingo = new ItemStack(Material.GREEN_DYE, 1);
-	public static ItemMeta startBingoMeta = startBingo.getItemMeta();
+    public BingoSettings(Plugin plugin) {
+        super(plugin.getName(), plugin);
+        this.plugin = plugin;
+        addSettings();
+    }
+
+    private void addSettings() {
+        this.addSetting("Items", new ArrayList<String>() {{
+            add("Mit dieser Einstellung kannst du wählen");
+            add("wie viele Items jeder Spieler");
+            add("sammeln muss!");
+        }}, Material.HAY_BLOCK, new ArrayList<Integer>() {{
+            add(9);
+            add(18);
+            add(27);
+        }});
+
+    }
+    public static ItemStack easy = new ItemStack(Material.LIME_DYE, 1);
+    public static ItemMeta easyMeta = easy.getItemMeta();
+
+    public static ItemStack medium = new ItemStack(Material.ORANGE_DYE, 1);
+    public static ItemMeta mediumMeta = medium.getItemMeta();
+
+    public static ItemStack hard = new ItemStack(Material.RED_DYE, 1);
+    public static ItemMeta hardMeta = hard.getItemMeta();
+
+    public static ItemStack keepInventory = new ItemStack(Material.GRAY_DYE);
+    public static ItemMeta keepInventoryMeta = keepInventory.getItemMeta();
+
+    public static ItemStack enableTimber = new ItemStack(Material.GRAY_DYE);
+    public static ItemMeta enableTimberMeta = enableTimber.getItemMeta();
+
+    public static ItemStack disableMobs = new ItemStack(Material.LIME_DYE);
+    public static ItemMeta disableMobsMeta = disableMobs.getItemMeta();
+
+    public static ItemStack startBingo = new ItemStack(Material.GREEN_DYE, 1);
+    public static ItemMeta startBingoMeta = startBingo.getItemMeta();
 
 
-	public static Inventory Settings = Bukkit.createInventory(null, 27, "Einstellungen");
+    public static Inventory Settings = Bukkit.createInventory(null, 27, "Einstellungen");
 
-	public static Inventory Settings() {
+    public static Inventory Settings() {
 
-		easyMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		easyMeta.setDisplayName(ChatColor.GREEN + "Einfach");
-		easy.setItemMeta(easyMeta);
+        easyMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        easyMeta.setDisplayName(ChatColor.GREEN + "Einfach");
+        easy.setItemMeta(easyMeta);
 
-		Settings.setItem(3, easy);
+        Settings.setItem(3, easy);
 
-		mediumMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		mediumMeta.setDisplayName(ChatColor.GOLD + "Mittel");
-		medium.setItemMeta(mediumMeta);
+        mediumMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        mediumMeta.setDisplayName(ChatColor.GOLD + "Mittel");
+        medium.setItemMeta(mediumMeta);
 
-		Settings.setItem(4, medium);
+        Settings.setItem(4, medium);
 
-		hardMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		hardMeta.setDisplayName(ChatColor.RED + "Schwer");
-		hard.setItemMeta(hardMeta);
+        hardMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        hardMeta.setDisplayName(ChatColor.RED + "Schwer");
+        hard.setItemMeta(hardMeta);
 
-		Settings.setItem(5, hard);
-		
-		keepInventoryMeta.setDisplayName(ChatColor.WHITE + "Keep Inventory");
-		keepInventory.setItemMeta(keepInventoryMeta);
-		Settings.setItem(9, keepInventory);
-		
-		enableTimberMeta.setDisplayName(ChatColor.WHITE + "Timber");
-		enableTimber.setItemMeta(enableTimberMeta);
-		Settings.setItem(10, enableTimber);
-		
-		disableMobsMeta.setDisplayName(ChatColor.GREEN + "Monster");
-		disableMobs.setItemMeta(disableMobsMeta);
-		Settings.setItem(11, disableMobs);
-		
-		startBingoMeta.setDisplayName(ChatColor.DARK_GREEN + "Start");
-		startBingo.setItemMeta(startBingoMeta);
-		Settings.setItem(26, startBingo);
+        Settings.setItem(5, hard);
 
-		return Settings;
-	}
+        keepInventoryMeta.setDisplayName(ChatColor.WHITE + "Keep Inventory");
+        keepInventory.setItemMeta(keepInventoryMeta);
+        Settings.setItem(9, keepInventory);
 
-	public static void update() {
+        enableTimberMeta.setDisplayName(ChatColor.WHITE + "Timber");
+        enableTimber.setItemMeta(enableTimberMeta);
+        Settings.setItem(10, enableTimber);
 
-		easy.setItemMeta(easyMeta);
+        disableMobsMeta.setDisplayName(ChatColor.GREEN + "Monster");
+        disableMobs.setItemMeta(disableMobsMeta);
+        Settings.setItem(11, disableMobs);
 
-		Settings.setItem(3, easy);
+        startBingoMeta.setDisplayName(ChatColor.DARK_GREEN + "Start");
+        startBingo.setItemMeta(startBingoMeta);
+        Settings.setItem(26, startBingo);
 
-		medium.setItemMeta(mediumMeta);
+        return Settings;
+    }
 
-		Settings.setItem(4, medium);
+    public static void update() {
 
-		hard.setItemMeta(hardMeta);
+        easy.setItemMeta(easyMeta);
 
-		Settings.setItem(5, hard);
-		
-		keepInventory.setItemMeta(keepInventoryMeta);
-		
-		Settings.setItem(9, keepInventory);
-		
-		enableTimber.setItemMeta(enableTimberMeta);
-		
-		Settings.setItem(10, enableTimber);
-		
-		disableMobs.setItemMeta(disableMobsMeta);
-		
-		Settings.setItem(11, disableMobs);
-	}
+        Settings.setItem(3, easy);
+
+        medium.setItemMeta(mediumMeta);
+
+        Settings.setItem(4, medium);
+
+        hard.setItemMeta(hardMeta);
+
+        Settings.setItem(5, hard);
+
+        keepInventory.setItemMeta(keepInventoryMeta);
+
+        Settings.setItem(9, keepInventory);
+
+        enableTimber.setItemMeta(enableTimberMeta);
+
+        Settings.setItem(10, enableTimber);
+
+        disableMobs.setItemMeta(disableMobsMeta);
+
+        Settings.setItem(11, disableMobs);
+    }
 
 }

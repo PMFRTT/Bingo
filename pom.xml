@@ -82,7 +82,7 @@
         <dependency>
             <groupId>com.github.PMFRTT</groupId>
             <artifactId>Core</artifactId>
-            <version>master-SNAPSHOT</version>
+            <version>settings-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
