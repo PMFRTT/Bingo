@@ -1,127 +1,110 @@
 package bingo;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import core.settings.PluginSettings;
+import core.settings.SubSettings;
 import org.bukkit.Material;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import settings.PluginSettings;
+import core.Utils;
 
 import java.util.ArrayList;
 
 public class BingoSettings extends PluginSettings {
 
-    private Plugin plugin;
+    Plugin plugin;
+    SubSettings singlePlayerSubSettings;
 
     public BingoSettings(Plugin plugin) {
-        super(plugin.getName(), plugin);
+        super(plugin.getName() + "-Einstellungen", plugin);
         this.plugin = plugin;
+        update();
+    }
+
+    public void update() {
+        this.getSettingsList().clear();
         addSettings();
     }
 
     private void addSettings() {
+        singlePlayerSubSettings = new SubSettings("Singleplayer-Einstellungen", plugin, this);
         this.addSetting("Items", new ArrayList<String>() {{
-            add("Mit dieser Einstellung kannst du wählen");
-            add("wie viele Items jeder Spieler");
-            add("sammeln muss!");
-        }}, Material.HAY_BLOCK, new ArrayList<Integer>() {{
+            add(Utils.colorize("&7Mit dieser Einstellung kannst du wählen"));
+            add(Utils.colorize("&7wie viele &6Items &7jeder Spieler"));
+            add(Utils.colorize("&7sammeln muss!"));
+        }}, Material.COMPARATOR, new ArrayList<Integer>() {{
             add(9);
             add(18);
             add(27);
         }});
 
+        this.addSetting("Schwierigkeit", new ArrayList<String>() {{
+            add(core.Utils.colorize("&7Mit dieser Einstellung kannst du"));
+            add(core.Utils.colorize("&6Schwierigkeit &7der zu sammelnden"));
+            add(core.Utils.colorize("&7Items wählen!"));
+        }}, Material.HAY_BLOCK, new ArrayList<Integer>() {{
+            add(0);
+            add(1);
+            add(2);
+        }}, new ArrayList<String>() {{
+            add(Utils.colorize("&aLeicht"));
+            add(Utils.colorize("&eMittel"));
+            add(Utils.colorize("&cSchwer"));
+        }}, new ArrayList<Material>() {{
+            add(Material.LIME_DYE);
+            add(Material.ORANGE_DYE);
+            add(Material.RED_DYE);
+        }});
+
+        this.addSetting("Keep Inventory", new ArrayList<String>() {{
+            add(Utils.colorize("&7Legt fest, ob Spieler nach dem Tod"));
+            add(Utils.colorize("&7ihre Items &cverlieren &7oder &abehalten"));
+        }}, Material.ENDER_EYE, false);
+
+        this.addSetting("Announce Bingo", new ArrayList<String>() {{
+            add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
+            add(Utils.colorize("&7Chat erfahren, dass ein"));
+            add(Utils.colorize("&6Item gefunden &7wurde"));
+        }}, Material.NOTE_BLOCK, true);
+
+        this.addSetting("Announce Advancements", new ArrayList<String>() {{
+            add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
+            add(Utils.colorize("&7Chat erfahren,dass ein"));
+            add(Utils.colorize("&6Advancement erreicht &7wurde"));
+        }}, Material.NOTE_BLOCK, false);
+
+        this.addSetting("Singleplayer", new ArrayList<String>() {{
+            add(Utils.colorize("&7Mit dem Singleplayer-Modus kannst"));
+            add(Utils.colorize("&7du &6alleine &7gegen die Zeit spielen"));
+            add(Utils.colorize("&8Shift+Rechtsclick -> Einstellungen"));
+        }}, Material.TOTEM_OF_UNDYING, false, singlePlayerSubSettings);
+
+        singlePlayerSubSettings.addSetting("Start-Zeit", new ArrayList<String>() {{
+            add(core.Utils.colorize("&7Hier kannst du einstellen, mit wie"));
+            add(core.Utils.colorize("&7viel &6Zeit &7du in dem"));
+            add(core.Utils.colorize("&7Singleplayer-Modus startest"));
+        }}, Material.CLOCK, new ArrayList<Integer>() {{
+            add(60);
+            add(120);
+            add(180);
+            add(240);
+            add(300);
+            add(360);
+            add(420);
+            add(480);
+            add(540);
+            add(600);
+        }}, new ArrayList<String>() {{
+            add(Utils.colorize("&c1 Minute"));
+            add(Utils.colorize("&c2 Minuten"));
+            add(Utils.colorize("&c3 Minuten"));
+            add(Utils.colorize("&e4 Minuten"));
+            add(Utils.colorize("&e5 Minuten"));
+            add(Utils.colorize("&e6 Minuten"));
+            add(Utils.colorize("&e7 Minuten"));
+            add(Utils.colorize("&a8 Minuten"));
+            add(Utils.colorize("&a9 Minuten"));
+            add(Utils.colorize("&a10 Minuten"));
+        }});
+
+        //this.addSetting();
     }
-    public static ItemStack easy = new ItemStack(Material.LIME_DYE, 1);
-    public static ItemMeta easyMeta = easy.getItemMeta();
-
-    public static ItemStack medium = new ItemStack(Material.ORANGE_DYE, 1);
-    public static ItemMeta mediumMeta = medium.getItemMeta();
-
-    public static ItemStack hard = new ItemStack(Material.RED_DYE, 1);
-    public static ItemMeta hardMeta = hard.getItemMeta();
-
-    public static ItemStack keepInventory = new ItemStack(Material.GRAY_DYE);
-    public static ItemMeta keepInventoryMeta = keepInventory.getItemMeta();
-
-    public static ItemStack enableTimber = new ItemStack(Material.GRAY_DYE);
-    public static ItemMeta enableTimberMeta = enableTimber.getItemMeta();
-
-    public static ItemStack disableMobs = new ItemStack(Material.LIME_DYE);
-    public static ItemMeta disableMobsMeta = disableMobs.getItemMeta();
-
-    public static ItemStack startBingo = new ItemStack(Material.GREEN_DYE, 1);
-    public static ItemMeta startBingoMeta = startBingo.getItemMeta();
-
-
-    public static Inventory Settings = Bukkit.createInventory(null, 27, "Einstellungen");
-
-    public static Inventory Settings() {
-
-        easyMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        easyMeta.setDisplayName(ChatColor.GREEN + "Einfach");
-        easy.setItemMeta(easyMeta);
-
-        Settings.setItem(3, easy);
-
-        mediumMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        mediumMeta.setDisplayName(ChatColor.GOLD + "Mittel");
-        medium.setItemMeta(mediumMeta);
-
-        Settings.setItem(4, medium);
-
-        hardMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        hardMeta.setDisplayName(ChatColor.RED + "Schwer");
-        hard.setItemMeta(hardMeta);
-
-        Settings.setItem(5, hard);
-
-        keepInventoryMeta.setDisplayName(ChatColor.WHITE + "Keep Inventory");
-        keepInventory.setItemMeta(keepInventoryMeta);
-        Settings.setItem(9, keepInventory);
-
-        enableTimberMeta.setDisplayName(ChatColor.WHITE + "Timber");
-        enableTimber.setItemMeta(enableTimberMeta);
-        Settings.setItem(10, enableTimber);
-
-        disableMobsMeta.setDisplayName(ChatColor.GREEN + "Monster");
-        disableMobs.setItemMeta(disableMobsMeta);
-        Settings.setItem(11, disableMobs);
-
-        startBingoMeta.setDisplayName(ChatColor.DARK_GREEN + "Start");
-        startBingo.setItemMeta(startBingoMeta);
-        Settings.setItem(26, startBingo);
-
-        return Settings;
-    }
-
-    public static void update() {
-
-        easy.setItemMeta(easyMeta);
-
-        Settings.setItem(3, easy);
-
-        medium.setItemMeta(mediumMeta);
-
-        Settings.setItem(4, medium);
-
-        hard.setItemMeta(hardMeta);
-
-        Settings.setItem(5, hard);
-
-        keepInventory.setItemMeta(keepInventoryMeta);
-
-        Settings.setItem(9, keepInventory);
-
-        enableTimber.setItemMeta(enableTimberMeta);
-
-        Settings.setItem(10, enableTimber);
-
-        disableMobs.setItemMeta(disableMobsMeta);
-
-        Settings.setItem(11, disableMobs);
-    }
-
 }

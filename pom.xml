@@ -60,10 +60,6 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
@@ -82,7 +78,9 @@
         <dependency>
             <groupId>com.github.PMFRTT</groupId>
             <artifactId>Core</artifactId>
-            <version>settings-SNAPSHOT</version>
+            <version>16.5.1.1</version>
+            <scope>system</scope>
+            <systemPath>C:\Code\Java\Bukkit\Core\target\Core.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

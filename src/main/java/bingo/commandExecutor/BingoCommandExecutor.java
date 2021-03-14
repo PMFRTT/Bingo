@@ -3,30 +3,24 @@ package bingo.commandExecutor;
 import bingo.BingoInventory;
 import bingo.BingoList;
 import bingo.BingoPlugin;
-import bingo.BingoSettings;
-import core.core.CoreResetServer;
-import core.Utils;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
-import settings.SettingCycle;
-
+import core.Utils;
 import java.util.Collection;
 
 public class BingoCommandExecutor implements CommandExecutor {
 
-    private final BingoPlugin Bingo;
+    private final BingoPlugin main;
     Collection<? extends Player> players = Bukkit.getOnlinePlayers();
     public static Player arg;
     public static BukkitScheduler scheduler = Bukkit.getScheduler();
 
-    public BingoCommandExecutor(BingoPlugin Bingo) {
-        this.Bingo = Bingo;
+    public BingoCommandExecutor(BingoPlugin main) {
+        this.main = main;
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -43,23 +37,19 @@ public class BingoCommandExecutor implements CommandExecutor {
             }
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("settings")) {
-                    player.openInventory(Bingo.getBingoSettings().getSettingsInventory().getInventory());
-                }
-            }
-            if (args.length == 2) {
-                if (args[0].equalsIgnoreCase("start")) {
-                    SettingCycle items = (SettingCycle) Bingo.getBingoSettings().getSettingbyName("Items");
-                    if (args[1].equalsIgnoreCase("easy")) {
-                        Bingo.startBingo(0, items.getValue());
-                    } else if (args[1].equalsIgnoreCase("medium")) {
-                        Bingo.startBingo(1, items.getValue());
-                    } else if (args[1].equalsIgnoreCase("hard")) {
-                        Bingo.startBingo(2, items.getValue());
+                    if (BingoPlugin.paused) {
+                        player.openInventory(main.getBingoSettings().getSettingsInventory().getInventory());
+                    }else{
+                        player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du kannst die &cEinstellungen nicht mehr ändern&f, wenn das Bingo gestartet wurde!"));
                     }
+                } else if (args[0].equalsIgnoreCase("start")) {
+                    main.startBingo();
+                }else if(args[0].equalsIgnoreCase("clear")){
+                    BingoPlugin.seconds = 0;
+                    BingoPlugin.paused = true;
+                    BingoList.getBingoList().clear();
+                    BingoList.playerBingoLists.clear();
                 }
-            }
-            if (args.length == 3) {
-
             }
         }
 
