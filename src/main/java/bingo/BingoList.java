@@ -13,7 +13,7 @@ import org.bukkit.inventory.Inventory;
 public class BingoList {
 
     public static ArrayList<Material> bingoList;
-    private static HashMap<String, ArrayList<Material>> playerBingoLists = new HashMap<String, ArrayList<Material>>();
+    public static HashMap<String, ArrayList<Material>> playerBingoLists = new HashMap<String, ArrayList<Material>>();
 
 
     public static Material[] easyMaterials = {Material.IRON_INGOT, Material.SANDSTONE, Material.GOLD_INGOT,
@@ -74,7 +74,9 @@ public class BingoList {
     public static void populatePlayerBingoList(int difficulty, int size) {
         BingoList.generateBingoList(difficulty, size);
         for (Player player : Bukkit.getOnlinePlayers()) {
-            playerBingoLists.put(player.getDisplayName(), BingoList.getBingoList());
+            assert getBingoList() != null;
+            ArrayList<Material> bingoList = new ArrayList<Material>(getBingoList());
+            playerBingoLists.put(player.getDisplayName(), bingoList);
             BingoInventory.createInventory(player, size);
         }
     }
