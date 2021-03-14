@@ -28,14 +28,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.16-R0.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.27" level="project" />
-    <orderEntry type="module-library">
-      <library name="Maven: com.github.PMFRTT:Core:16.5.1.1">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../Core/target/Core.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: com.github.PMFRTT:Core:settings-0e648a56aa-1" level="project" />
   </component>
 </module>

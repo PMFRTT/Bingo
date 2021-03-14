@@ -26,4 +26,13 @@ public class BingoEventhandler implements Listener {
             e.setCancelled(true);
         }
     }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        if (BingoPlugin.isPaused) {
+            e.setCancelled(true);
+        }
+    }
+
+
 }
