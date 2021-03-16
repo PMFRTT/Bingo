@@ -29,6 +29,8 @@ public final class BingoPlugin extends JavaPlugin {
     public static boolean paused = true;
     public static boolean singleplayer = false;
     public boolean announce = true;
+    public static SideList sideList;
+
 
     @Override
     public void onEnable() {
@@ -39,6 +41,7 @@ public final class BingoPlugin extends JavaPlugin {
         BingoCommandExecutor bingoCommandExecutor = new BingoCommandExecutor(this);
         TopCommandExecutor topCommandExecutor = new TopCommandExecutor();
         ResetCommandExecutor resetCommandExecutor = new ResetCommandExecutor(this);
+        sideList = new SideList(this);
 
         Objects.requireNonNull(getCommand("Bingo")).setExecutor(bingoCommandExecutor);
         Objects.requireNonNull(getCommand("Top")).setExecutor(topCommandExecutor);
@@ -50,10 +53,10 @@ public final class BingoPlugin extends JavaPlugin {
             @Override
             public void run() {
                 if (singleplayer) {
-                    if(!paused){
+                    if (!paused) {
                         seconds--;
                     }
-                    if(seconds <= 0){
+                    if (seconds <= 0) {
                         paused = true;
                     }
                     for (Player player : Bukkit.getOnlinePlayers()) {
@@ -93,7 +96,6 @@ public final class BingoPlugin extends JavaPlugin {
             public void run() {
                 if (!paused) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        ScoreBoard.test(player, BingoList.getBingoList(player));
                         if (!BingoList.getBingoList(player).isEmpty()) {
                             CheckInventory.checkInventory(player, announce, singleplayer, getDifficulty());
                             BingoInventory.updateInventory(player);
@@ -118,21 +120,24 @@ public final class BingoPlugin extends JavaPlugin {
         SettingCycle singlePlayerStartTime = (SettingCycle) bingoSettings.singlePlayerSubSettings.getSettingbyName("Start-Zeit");
         this.difficulty = difficulty.getValue();
         this.announce = announce.getSettingValue();
-        if(advancements.getSettingValue()){
+        if (advancements.getSettingValue()) {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
-        }else {
+            CoreMain.showAdvancements = true;
+        } else {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+            CoreMain.showAdvancements = false;
         }
         singleplayer = singlePlayer.getSettingValue();
         if (keepInventory.getSettingValue()) {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
         }
-        if(singleplayer){
+        if (singleplayer) {
             seconds = singlePlayerStartTime.getValue();
         }
 
         BingoList.populatePlayerBingoList(difficulty.getValue(), items.getValue());
         bingo.Utils.preparePlayers();
+        sideList.init();
         paused = false;
     }
 
@@ -143,7 +148,7 @@ public final class BingoPlugin extends JavaPlugin {
         return bingoSettings;
     }
 
-    public int getDifficulty(){
+    public int getDifficulty() {
         return this.difficulty;
     }
 

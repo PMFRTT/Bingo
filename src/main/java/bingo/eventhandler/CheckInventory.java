@@ -26,6 +26,7 @@ public class CheckInventory {
                     BingoPlugin.seconds += random;
                     player.sendMessage(Utils.colorize("&f+&a" + Utils.formatTimerTime((int) random)));
                 }
+                BingoPlugin.sideList.removeScore(player, material);
                 materialsToRemove.add(material);
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 0f);
                 if (announcement && !singleplayer) {

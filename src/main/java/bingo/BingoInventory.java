@@ -21,7 +21,7 @@ public class BingoInventory {
         ItemStack itemStack = new ItemStack(Material.TURTLE_HELMET, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
-        itemMeta.setDisplayName(ChatColor.GOLD + "Abgeschlossen!");
+        itemMeta.setDisplayName(ChatColor.GOLD + "Abgeschlossen!" + BingoPlugin.seconds);
         itemMeta.hasEnchants();
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
@@ -63,4 +63,5 @@ public class BingoInventory {
             i++;
         }
     }
+
 }

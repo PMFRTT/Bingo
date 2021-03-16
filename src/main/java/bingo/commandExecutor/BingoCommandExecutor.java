@@ -33,6 +33,8 @@ public class BingoCommandExecutor implements CommandExecutor {
 
         if (command.getLabel().equalsIgnoreCase("Bingo")) {
             if (args.length == 0) {
+                assert player != null;
+                BingoInventory.updateInventory(player);
                 player.openInventory(BingoInventory.getPlayerInventory(player));
             }
             if (args.length == 1) {

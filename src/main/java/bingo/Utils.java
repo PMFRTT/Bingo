@@ -1,5 +1,6 @@
 package bingo;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,7 +46,8 @@ public class Utils {
     public static String formatMaterialName(Material material) {
         String materialName = material.toString();
         String tmp = materialName.replace("_", " ");
-        return tmp.toUpperCase();
+        String tmp2 = tmp.toLowerCase();
+        return WordUtils.capitalize(tmp2);
     }
 
 
