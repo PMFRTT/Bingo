@@ -7,9 +7,11 @@ import bingo.eventhandler.BingoEventhandler;
 import bingo.eventhandler.CheckInventory;
 import core.core.CoreMain;
 import core.Utils;
+import core.timer.Timer;
 import core.core.CoreSendStringPacket;
 import core.settings.SettingCycle;
 import core.settings.SettingSwitch;
+import core.timer.TimerType;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,19 +25,18 @@ public final class BingoPlugin extends JavaPlugin {
     private final BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
     public BingoSettings bingoSettings;
 
-    public static int seconds = 0;
-
     public int difficulty = 0;
     public static boolean paused = true;
     public static boolean singleplayer = false;
     public boolean announce = true;
     public static SideList sideList;
-
+    public static Timer timer;
 
     @Override
     public void onEnable() {
 
         CoreMain.setPlugin(this);
+        timer = new Timer(this, TimerType.Increasing);
         bingoEventhandler.initialize();
         bingoSettings = new BingoSettings(this);
         BingoCommandExecutor bingoCommandExecutor = new BingoCommandExecutor(this);
@@ -48,47 +49,6 @@ public final class BingoPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("reset")).setExecutor(resetCommandExecutor);
 
         BukkitScheduler scheduler1 = getServer().getScheduler();
-        scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
-
-            @Override
-            public void run() {
-                if (singleplayer) {
-                    if (!paused) {
-                        seconds--;
-                    }
-                    if (seconds <= 0) {
-                        paused = true;
-                    }
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        String msg;
-                        if (!paused) {
-                            msg = Utils.colorize("Du hast noch &b" + Utils.formatTimerTime(seconds) + "&f Zeit");
-                        } else {
-                            msg = Utils.colorize("&cDas Bingo ist pausiert!");
-                        }
-                        CoreSendStringPacket.sendPacketToHotbar(player, msg);
-
-                    }
-                } else {
-
-                    if (!paused) {
-                        seconds++;
-                    }
-
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        String msg;
-                        if (!paused) {
-                            msg = Utils.colorize("Das Bingo läuft seit &b" + Utils.formatTimerTime(seconds));
-                        } else {
-                            msg = Utils.colorize("&cDas Bingo ist pausiert!");
-                        }
-                        CoreSendStringPacket.sendPacketToHotbar(player, msg);
-
-                    }
-
-                }
-            }
-        }, 0L, 20);
 
         scheduler1.scheduleSyncRepeatingTask(this, new Runnable() {
 
@@ -100,7 +60,8 @@ public final class BingoPlugin extends JavaPlugin {
                             CheckInventory.checkInventory(player, announce, singleplayer, getDifficulty());
                             BingoInventory.updateInventory(player);
                         } else {
-                            Utils.sendMessageToEveryone(Utils.getPrefix("Bingo") + Utils.colorize("&e" + Utils.getDisplayName(player) + " &fhat das Bingo in &a" + Utils.formatTimerTime(seconds) + "&f beendet!"));
+                            timer.pause();
+                            Utils.sendMessageToEveryone(Utils.getPrefix("Bingo") + Utils.colorize("&e" + Utils.getDisplayName(player) + " &fhat das Bingo in &a" + Utils.formatTimerTimeTicksThreeDecimal(timer.getTicks()) + "&f beendet!"));
                             Utils.playSoundForAll(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
                             paused = true;
                         }
@@ -132,13 +93,16 @@ public final class BingoPlugin extends JavaPlugin {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
         }
         if (singleplayer) {
-            seconds = singlePlayerStartTime.getValue();
+            timer.setTimerType(TimerType.Decreasing);
+            timer.setSeconds(singlePlayerStartTime.getValue());
+            timer.setSingle(true);
         }
 
         BingoList.populatePlayerBingoList(difficulty.getValue(), items.getValue());
         bingo.Utils.preparePlayers();
         sideList.init();
         paused = false;
+        timer.resume();
     }
 
     public void onDisable() {

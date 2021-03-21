@@ -47,7 +47,7 @@ public class BingoCommandExecutor implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("start")) {
                     main.startBingo();
                 }else if(args[0].equalsIgnoreCase("clear")){
-                    BingoPlugin.seconds = 0;
+                    BingoPlugin.timer.pause();
                     BingoPlugin.paused = true;
                     BingoList.getBingoList().clear();
                     BingoList.playerBingoLists.clear();
