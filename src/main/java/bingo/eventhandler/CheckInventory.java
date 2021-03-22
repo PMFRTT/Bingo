@@ -23,7 +23,7 @@ public class CheckInventory {
             if (player.getInventory().contains(material)) {
                 if(singleplayer){
                     double random = min + Math.random() * (max - min) * multiplier;
-                    BingoPlugin.timer.addSeconds((int)random);
+                    BingoPlugin.getTimer().addSeconds((int)random);
                     player.sendMessage(Utils.colorize("&f+&a" + Utils.formatTimerTime((int) random)));
                 }
                 BingoPlugin.sideList.removeScore(player, material);

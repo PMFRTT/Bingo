@@ -8,7 +8,6 @@ import bingo.eventhandler.CheckInventory;
 import core.core.CoreMain;
 import core.Utils;
 import core.timer.Timer;
-import core.core.CoreSendStringPacket;
 import core.settings.SettingCycle;
 import core.settings.SettingSwitch;
 import core.timer.TimerType;
@@ -16,27 +15,25 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.*;
 
 public final class BingoPlugin extends JavaPlugin {
 
     private final BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
-    public BingoSettings bingoSettings;
-
-    public int difficulty = 0;
-    public static boolean paused = true;
-    public static boolean singleplayer = false;
-    public boolean announce = true;
+    private static BingoSettings bingoSettings;
+    private int difficulty = 0;
+    private static boolean singleplayer = false;
+    private boolean announce = true;
     public static SideList sideList;
-    public static Timer timer;
+    private static Timer timer;
+    public static boolean scatter;
 
     @Override
     public void onEnable() {
 
         CoreMain.setPlugin(this);
-        timer = new Timer(this, TimerType.Increasing);
+        timer = new Timer(this, TimerType.INCREASING, "Das Bingo läuft seit: &b", "&cDas Bingo ist pausiert", false);
         bingoEventhandler.initialize();
         bingoSettings = new BingoSettings(this);
         BingoCommandExecutor bingoCommandExecutor = new BingoCommandExecutor(this);
@@ -54,7 +51,7 @@ public final class BingoPlugin extends JavaPlugin {
 
             @Override
             public void run() {
-                if (!paused) {
+                if (!timer.isPaused()) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (!BingoList.getBingoList(player).isEmpty()) {
                             CheckInventory.checkInventory(player, announce, singleplayer, getDifficulty());
@@ -63,7 +60,6 @@ public final class BingoPlugin extends JavaPlugin {
                             timer.pause();
                             Utils.sendMessageToEveryone(Utils.getPrefix("Bingo") + Utils.colorize("&e" + Utils.getDisplayName(player) + " &fhat das Bingo in &a" + Utils.formatTimerTimeTicksThreeDecimal(timer.getTicks()) + "&f beendet!"));
                             Utils.playSoundForAll(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
-                            paused = true;
                         }
                     }
                 }
@@ -78,9 +74,11 @@ public final class BingoPlugin extends JavaPlugin {
         SettingSwitch singlePlayer = (SettingSwitch) bingoSettings.getSettingbyName("Singleplayer");
         SettingSwitch announce = (SettingSwitch) bingoSettings.getSettingbyName("Announce Bingo");
         SettingSwitch advancements = (SettingSwitch) bingoSettings.getSettingbyName("Announce Advancements");
+        SettingSwitch scatter = (SettingSwitch) bingoSettings.getSettingbyName("Scatter Players");
         SettingCycle singlePlayerStartTime = (SettingCycle) bingoSettings.singlePlayerSubSettings.getSettingbyName("Start-Zeit");
         this.difficulty = difficulty.getValue();
         this.announce = announce.getSettingValue();
+        this.scatter = scatter.getSettingValue();
         if (advancements.getSettingValue()) {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
             CoreMain.showAdvancements = true;
@@ -93,7 +91,7 @@ public final class BingoPlugin extends JavaPlugin {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
         }
         if (singleplayer) {
-            timer.setTimerType(TimerType.Decreasing);
+            timer.setTimerType(TimerType.DECREASING);
             timer.setSeconds(singlePlayerStartTime.getValue());
             timer.setSingle(true);
         }
@@ -101,7 +99,6 @@ public final class BingoPlugin extends JavaPlugin {
         BingoList.populatePlayerBingoList(difficulty.getValue(), items.getValue());
         bingo.Utils.preparePlayers();
         sideList.init();
-        paused = false;
         timer.resume();
     }
 
@@ -114,6 +111,10 @@ public final class BingoPlugin extends JavaPlugin {
 
     public int getDifficulty() {
         return this.difficulty;
+    }
+
+    public static Timer getTimer() {
+        return timer;
     }
 
 }

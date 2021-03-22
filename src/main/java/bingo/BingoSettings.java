@@ -63,13 +63,20 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
             add(Utils.colorize("&7Chat erfahren, dass ein"));
             add(Utils.colorize("&6Item gefunden &7wurde"));
-        }}, Material.NOTE_BLOCK, true);
+        }}, Material.NOTE_BLOCK, false);
 
         this.addSetting("Announce Advancements", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
-            add(Utils.colorize("&7Chat erfahren,dass ein"));
+            add(Utils.colorize("&7Chat erfahren, dass ein"));
             add(Utils.colorize("&6Advancement erreicht &7wurde"));
         }}, Material.NOTE_BLOCK, false);
+
+        this.addSetting("Scatter Players", new ArrayList<String>(){{
+            add(Utils.colorize("&7Legt fest, ob Spieler"));
+            add(Utils.colorize("&7zu beginn des Bingos an"));
+            add(Utils.colorize("&7eine zufällige Position"));
+            add(Utils.colorize("&6teleportiert &7werden"));
+        }}, Material.ENDER_PEARL, true);
 
         this.addSetting("Singleplayer", new ArrayList<String>() {{
             add(Utils.colorize("&7Mit dem Singleplayer-Modus kannst"));

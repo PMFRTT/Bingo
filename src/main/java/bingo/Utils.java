@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
 import java.util.Random;
 
 public class Utils {
@@ -31,7 +32,9 @@ public class Utils {
 
     public static void preparePlayers() {
         clearPlayers();
-        scatterPlayers();
+        if (BingoPlugin.scatter) {
+            scatterPlayers();
+        }
     }
 
     private static void clearPlayers() {

@@ -6,7 +6,7 @@
 
     <groupId>Bingo</groupId>
     <artifactId>Bingo</artifactId>
-    <version>16.5.23</version>
+    <version>16.5.24-pre1</version>
     <packaging>jar</packaging>
 
     <name>Bingo</name>

@@ -39,7 +39,7 @@ public class BingoCommandExecutor implements CommandExecutor {
             }
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("settings")) {
-                    if (BingoPlugin.paused) {
+                    if (BingoPlugin.getTimer().isPaused() || player.isOp()) {
                         player.openInventory(main.getBingoSettings().getSettingsInventory().getInventory());
                     }else{
                         player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du kannst die &cEinstellungen nicht mehr ändern&f, wenn das Bingo gestartet wurde!"));
@@ -47,8 +47,7 @@ public class BingoCommandExecutor implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("start")) {
                     main.startBingo();
                 }else if(args[0].equalsIgnoreCase("clear")){
-                    BingoPlugin.timer.pause();
-                    BingoPlugin.paused = true;
+                    BingoPlugin.getTimer().pause();
                     BingoList.getBingoList().clear();
                     BingoList.playerBingoLists.clear();
                 }
