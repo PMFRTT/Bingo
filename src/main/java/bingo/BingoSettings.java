@@ -12,6 +12,7 @@ public class BingoSettings extends PluginSettings {
 
     Plugin plugin;
     SubSettings singlePlayerSubSettings;
+    SubSettings scatterPlayerSubSettings;
 
     public BingoSettings(Plugin plugin) {
         super(plugin.getName() + "-Einstellungen", plugin);
@@ -26,6 +27,8 @@ public class BingoSettings extends PluginSettings {
 
     private void addSettings() {
         singlePlayerSubSettings = new SubSettings("Singleplayer-Einstellungen", plugin, this);
+        scatterPlayerSubSettings = new SubSettings("Scatter-Einstellungen", plugin, this);
+
         this.addSetting("Items", new ArrayList<String>() {{
             add(Utils.colorize("&7Mit dieser Einstellung kannst du wählen"));
             add(Utils.colorize("&7wie viele &6Items &7jeder Spieler"));
@@ -71,17 +74,46 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&6Advancement erreicht &7wurde"));
         }}, Material.NOTE_BLOCK, false);
 
-        this.addSetting("Scatter Players", new ArrayList<String>(){{
+        this.addSetting("Scatter Players", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Spieler"));
             add(Utils.colorize("&7zu beginn des Bingos an"));
             add(Utils.colorize("&7eine zufällige Position"));
             add(Utils.colorize("&6teleportiert &7werden"));
-        }}, Material.ENDER_PEARL, true);
+            add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
+        }}, Material.ENDER_PEARL, true, scatterPlayerSubSettings);
+
+        scatterPlayerSubSettings.addSetting("Scatter-Größe", new ArrayList<String>() {{
+            add(Utils.colorize("&7Hier kannst du einstellen,"));
+            add(Utils.colorize("&7wie &6groß der Radius&7 des "));
+            add(Utils.colorize("&7Scatterns sein soll"));
+        }}, Material.CARTOGRAPHY_TABLE, new ArrayList<Integer>() {{
+            add(100);
+            add(250);
+            add(500);
+            add(750);
+            add(1000);
+            add(1500);
+            add(2000);
+            add(5000);
+            add(10000);
+            add(20000);
+        }}, new ArrayList<String>() {{
+            add(Utils.colorize("&b100 &fBlöcke"));
+            add(Utils.colorize("&b250 &fBlöcke"));
+            add(Utils.colorize("&b500 &fBlöcke"));
+            add(Utils.colorize("&b750 &fBlöcke"));
+            add(Utils.colorize("&b1000 &fBlöcke"));
+            add(Utils.colorize("&b1500 &fBlöcke"));
+            add(Utils.colorize("&b2000 &fBlöcke"));
+            add(Utils.colorize("&b5000 &fBlöcke"));
+            add(Utils.colorize("&b10000 &fBlöcke"));
+            add(Utils.colorize("&b20000 &fBlöcke"));
+        }});
 
         this.addSetting("Singleplayer", new ArrayList<String>() {{
             add(Utils.colorize("&7Mit dem Singleplayer-Modus kannst"));
             add(Utils.colorize("&7du &6alleine &7gegen die Zeit spielen"));
-            add(Utils.colorize("&8Shift+Rechtsclick -> Einstellungen"));
+            add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
         }}, Material.TOTEM_OF_UNDYING, false, singlePlayerSubSettings);
 
         singlePlayerSubSettings.addSetting("Start-Zeit", new ArrayList<String>() {{

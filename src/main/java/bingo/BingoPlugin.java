@@ -76,6 +76,7 @@ public final class BingoPlugin extends JavaPlugin {
         SettingSwitch advancements = (SettingSwitch) bingoSettings.getSettingbyName("Announce Advancements");
         SettingSwitch scatter = (SettingSwitch) bingoSettings.getSettingbyName("Scatter Players");
         SettingCycle singlePlayerStartTime = (SettingCycle) bingoSettings.singlePlayerSubSettings.getSettingbyName("Start-Zeit");
+        SettingCycle scatterPlayerSize = (SettingCycle) bingoSettings.scatterPlayerSubSettings.getSettingbyName("Scatter-Größe");
         this.difficulty = difficulty.getValue();
         this.announce = announce.getSettingValue();
         this.scatter = scatter.getSettingValue();
@@ -97,7 +98,7 @@ public final class BingoPlugin extends JavaPlugin {
         }
 
         BingoList.populatePlayerBingoList(difficulty.getValue(), items.getValue());
-        bingo.Utils.preparePlayers();
+        bingo.Utils.preparePlayers(scatterPlayerSize.getValue());
         sideList.init();
         timer.resume();
     }

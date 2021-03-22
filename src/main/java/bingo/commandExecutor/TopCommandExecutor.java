@@ -33,7 +33,7 @@ public class TopCommandExecutor implements CommandExecutor {
                 Location newLocOfPlayer = new Location(w, p.getLocation().getX(), height, p.getLocation().getZ(), yaw,
                         pitch);
                 if (p.getLocation().getY() <= height - 1) {
-
+                    newLocOfPlayer.add(0, 2, 0);
                     p.teleport(newLocOfPlayer);
                     p.sendMessage(Utils.getPrefix("Bingo") + ChatColor.GREEN + "Du wurdest an die Oberfläche teleportiert!");
                     return true;

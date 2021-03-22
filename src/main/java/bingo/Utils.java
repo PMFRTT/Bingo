@@ -11,14 +11,14 @@ import java.util.Random;
 
 public class Utils {
 
-    private static void scatterPlayers() {
+    private static void scatterPlayers(int scatterSize) {
         Random random = new Random();
         World world = Bukkit.getWorld("world");
         for (Player player : Bukkit.getOnlinePlayers()) {
             Location location = player.getLocation();
             do {
-                float x = (random.nextFloat() - 0.5f) * 20000;
-                float z = (random.nextFloat() - 0.5f) * 20000;
+                double x = (random.nextFloat() - 0.5f) * scatterSize;
+                double z = (random.nextFloat() - 0.5f) * scatterSize;
                 location.setX(x);
                 location.setZ(z);
                 assert world != null;
@@ -30,10 +30,10 @@ public class Utils {
         }
     }
 
-    public static void preparePlayers() {
+    public static void preparePlayers(int scatterSize) {
         clearPlayers();
         if (BingoPlugin.scatter) {
-            scatterPlayers();
+            scatterPlayers(scatterSize);
         }
     }
 
