@@ -45,6 +45,7 @@ public final class BingoPlugin extends JavaPlugin {
         Objects.requireNonNull(getCommand("Bingo")).setExecutor(bingoCommandExecutor);
         Objects.requireNonNull(getCommand("Top")).setExecutor(topCommandExecutor);
         Objects.requireNonNull(getCommand("reset")).setExecutor(resetCommandExecutor);
+        Objects.requireNonNull(getCommand("rtp")).setExecutor(bingoCommandExecutor);
 
         BukkitScheduler scheduler1 = getServer().getScheduler();
 

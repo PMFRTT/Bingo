@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import core.Utils;
+
 import java.util.Collection;
 
 public class BingoCommandExecutor implements CommandExecutor {
@@ -41,17 +42,20 @@ public class BingoCommandExecutor implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("settings")) {
                     if (BingoPlugin.getTimer().isPaused() || player.isOp()) {
                         player.openInventory(main.getBingoSettings().getSettingsInventory().getInventory());
-                    }else{
+                    } else {
                         player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du kannst die &cEinstellungen nicht mehr ändern&f, wenn das Bingo gestartet wurde!"));
                     }
                 } else if (args[0].equalsIgnoreCase("start")) {
                     main.startBingo();
-                }else if(args[0].equalsIgnoreCase("clear")){
+                } else if (args[0].equalsIgnoreCase("clear")) {
                     BingoPlugin.getTimer().pause();
                     BingoList.getBingoList().clear();
                     BingoList.playerBingoLists.clear();
                 }
             }
+        } else if (command.getLabel().equalsIgnoreCase("rtp")) {
+
+            return false;
         }
 
         return false;
