@@ -1,6 +1,7 @@
 package bingo.eventhandler;
 
 import bingo.BingoInventory;
+import bingo.BingoList;
 import bingo.BingoPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -39,6 +40,7 @@ public class BingoEventhandler implements Listener {
                 if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
                     if (e.getClick().isShiftClick()) {
                         e.getWhoClicked().getInventory().addItem(new ItemStack(e.getCurrentItem().getType(), 1));
+                        BingoList.removeMaterialFromCollected((Player) e.getWhoClicked(), e.getCurrentItem().getType());
                         e.getInventory().setItem(e.getRawSlot(), new ItemStack(Material.AIR));
                         CheckInventory.unlockSlot((Player) e.getWhoClicked(), e.getSlot());
                     }

@@ -102,7 +102,9 @@ public class BingoList {
     }
 
     public static void removeMaterialFromCollected(Player player, Material material) {
-        playerCollectedList.get(player.getDisplayName()).remove(material);
+        if (playerCollectedList.get(player.getDisplayName()).contains(material)) {
+            playerCollectedList.get(player.getDisplayName()).remove(material);
+        }
     }
 
     public static ArrayList<Material> getBingoList() {

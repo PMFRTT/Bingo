@@ -6,5 +6,5 @@ commands:
   Bingo:
   Reset:
   Top:
-  RPT:
+  RTP:
 depend: [Core]
