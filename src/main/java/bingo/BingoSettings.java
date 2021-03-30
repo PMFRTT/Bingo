@@ -13,6 +13,7 @@ public class BingoSettings extends PluginSettings {
     Plugin plugin;
     SubSettings singlePlayerSubSettings;
     SubSettings scatterPlayerSubSettings;
+    SubSettings teleporterSubSettings;
 
     public BingoSettings(Plugin plugin) {
         super(plugin.getName() + "-Einstellungen", plugin);
@@ -28,6 +29,7 @@ public class BingoSettings extends PluginSettings {
     private void addSettings() {
         singlePlayerSubSettings = new SubSettings("Singleplayer-Einstellungen", plugin, this);
         scatterPlayerSubSettings = new SubSettings("Scatter-Einstellungen", plugin, this);
+        teleporterSubSettings = new SubSettings("Teleporter-Einstellungen", plugin, this);
 
         this.addSetting("Items", new ArrayList<String>() {{
             add(Utils.colorize("&7Mit dieser Einstellung kannst du wählen"));
@@ -115,6 +117,13 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7du &6alleine &7gegen die Zeit spielen"));
             add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
         }}, Material.TOTEM_OF_UNDYING, false, singlePlayerSubSettings);
+
+        this.addSetting("Teleporter", new ArrayList<String>() {{
+            add(Utils.colorize("&7Ermöglicht dem Spieler sich"));
+            add(Utils.colorize("&7entweder einmalig oder mit einem"));
+            add(Utils.colorize("&7Countdown zu &ateleportieren!"));
+            add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
+        }}, Material.ENDERMAN_SPAWN_EGG, false, teleporterSubSettings);
 
         singlePlayerSubSettings.addSetting("Start-Zeit", new ArrayList<String>() {{
             add(core.Utils.colorize("&7Hier kannst du einstellen, mit wie"));

@@ -8,8 +8,8 @@ import bingo.eventhandler.CheckInventory;
 import core.core.CoreMain;
 import core.Utils;
 import core.timer.Timer;
-import core.settings.SettingCycle;
-import core.settings.SettingSwitch;
+import core.settings.Setting.SettingCycle;
+import core.settings.Setting.SettingSwitch;
 import core.timer.TimerType;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -23,6 +23,7 @@ public final class BingoPlugin extends JavaPlugin {
     private final BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
     private static BingoSettings bingoSettings;
     private int difficulty = 0;
+    public static int items = 0;
     private static boolean singleplayer = false;
     private boolean announce = true;
     public static SideList sideList;
@@ -53,9 +54,9 @@ public final class BingoPlugin extends JavaPlugin {
             public void run() {
                 if (!timer.isPaused()) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (!BingoList.getBingoList(player).isEmpty()) {
-                            CheckInventory.checkInventory(player, announce, singleplayer, getDifficulty());
+                        if (!BingoList.completed(player)) {
                             BingoInventory.updateInventory(player);
+                            CheckInventory.checkInventory(player, items);
                         } else {
                             timer.pause();
                             Utils.sendMessageToEveryone(Utils.getPrefix("Bingo") + Utils.colorize("&e" + Utils.getDisplayName(player) + " &fhat das Bingo in &a" + Utils.formatTimerTimeTicksThreeDecimal(timer.getTicks()) + "&f beendet!"));
@@ -82,10 +83,8 @@ public final class BingoPlugin extends JavaPlugin {
         this.scatter = scatter.getSettingValue();
         if (advancements.getSettingValue()) {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
-            CoreMain.showAdvancements = true;
         } else {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-            CoreMain.showAdvancements = false;
         }
         singleplayer = singlePlayer.getSettingValue();
         if (keepInventory.getSettingValue()) {
@@ -96,7 +95,7 @@ public final class BingoPlugin extends JavaPlugin {
             timer.setSeconds(singlePlayerStartTime.getValue());
             timer.setSingle(true);
         }
-
+        this.items = items.getValue();
         BingoList.populatePlayerBingoList(difficulty.getValue(), items.getValue());
         bingo.Utils.preparePlayers(scatterPlayerSize.getValue());
         sideList.init();

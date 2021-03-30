@@ -14,6 +14,9 @@ public class BingoList {
 
     public static ArrayList<Material> bingoList;
     public static HashMap<String, ArrayList<Material>> playerBingoLists = new HashMap<String, ArrayList<Material>>();
+    public static HashMap<String, ArrayList<Material>> playerCollectedList = new HashMap<String, ArrayList<Material>>();
+
+    private static int itemCount;
 
 
     public static Material[] easyMaterials = {Material.IRON_INGOT, Material.SANDSTONE, Material.GOLD_INGOT,
@@ -31,7 +34,11 @@ public class BingoList {
             Material.DISPENSER, Material.IRON_BLOCK, Material.IRON_BARS, Material.CAKE, Material.ANVIL, Material.CAMPFIRE,
             Material.NETHERRACK, Material.COMPASS, Material.CLOCK, Material.BAKED_POTATO, Material.CAULDRON, Material.WARPED_DOOR,
             Material.WARPED_PLANKS, Material.CRIMSON_DOOR, Material.CRIMSON_STEM, Material.TNT, Material.REDSTONE_LAMP, Material.PISTON,
-            Material.LECTERN, Material.POWERED_RAIL, Material.SOUL_TORCH, Material.VINE
+            Material.LECTERN, Material.POWERED_RAIL, Material.SOUL_TORCH, Material.VINE, Material.PURPLE_WOOL, Material.GLOWSTONE,
+            Material.NETHER_BRICKS, Material.RED_CONCRETE, Material.COBWEB, Material.MILK_BUCKET, Material.ENDER_PEARL,
+            Material.FIREWORK_ROCKET, Material.QUARTZ_PILLAR, Material.SWEET_BERRIES, Material.DRIED_KELP_BLOCK, Material.GOLDEN_CHESTPLATE,
+            Material.SHIELD, Material.GOLDEN_CARROT, Material.GLISTERING_MELON_SLICE, Material.FERMENTED_SPIDER_EYE, Material.HOPPER_MINECART,
+            Material.PISTON, Material.NOTE_BLOCK, Material.DAYLIGHT_DETECTOR, Material.TARGET, Material.LILY_PAD, Material.ORANGE_CARPET
     };
 
     public static Material[] hardMaterials = {Material.ENCHANTING_TABLE, Material.BLAZE_ROD, Material.CAKE,
@@ -44,10 +51,10 @@ public class BingoList {
 
     };
 
-    public static ArrayList<Material> scrambleList(Material[] listMat, int size) {
+    private static ArrayList<Material> scrambleList(Material[] listMat, int size) {
         ArrayList<Material> bingoList = new ArrayList<Material>();
         Random random = new Random();
-
+        itemCount = size;
         while (bingoList.size() < size) {
             int randomInt = random.nextInt(listMat.length);
             if (!bingoList.contains(listMat[randomInt])) {
@@ -57,7 +64,7 @@ public class BingoList {
         return bingoList;
     }
 
-    public static void generateBingoList(int difficulty, int size) {
+    private static void generateBingoList(int difficulty, int size) {
         switch (difficulty) {
             case 0:
                 bingoList = scrambleList(easyMaterials, size);
@@ -77,8 +84,25 @@ public class BingoList {
             assert getBingoList() != null;
             ArrayList<Material> bingoList = new ArrayList<Material>(getBingoList());
             playerBingoLists.put(player.getDisplayName(), bingoList);
+            createCollectionLists(player);
             BingoInventory.createInventory(player, size);
         }
+    }
+
+    private static void createCollectionLists(Player player) {
+        if (!bingoList.isEmpty()) {
+            playerCollectedList.put(player.getDisplayName(), new ArrayList<Material>());
+        }
+    }
+
+    public static void addMaterialToCollected(Player player, Material material) {
+        if (!playerCollectedList.get(player.getDisplayName()).contains(material)) {
+            playerCollectedList.get(player.getDisplayName()).add(material);
+        }
+    }
+
+    public static void removeMaterialFromCollected(Player player, Material material) {
+        playerCollectedList.get(player.getDisplayName()).remove(material);
     }
 
     public static ArrayList<Material> getBingoList() {
@@ -91,7 +115,14 @@ public class BingoList {
         return playerBingoLists.get(player.getDisplayName());
     }
 
-    public static void removeMaterialFromList(Player player, Material material) {
-        playerBingoLists.get(player.getDisplayName()).remove(material);
+    public static boolean completed(Player player) {
+        int counter = 0;
+        for (Material material : playerBingoLists.get(player.getDisplayName())) {
+            if (playerCollectedList.get(player.getDisplayName()).contains(material)) {
+                counter++;
+            }
+        }
+        return counter == itemCount;
     }
+
 }

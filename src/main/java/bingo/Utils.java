@@ -1,5 +1,6 @@
 package bingo;
 
+import bingo.eventhandler.CheckInventory;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -32,6 +33,7 @@ public class Utils {
 
     public static void preparePlayers(int scatterSize) {
         clearPlayers();
+        CheckInventory.createLock();
         if (BingoPlugin.scatter) {
             scatterPlayers(scatterSize);
         }

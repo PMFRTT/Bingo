@@ -1,6 +1,8 @@
 package bingo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import core.Utils;
 import org.bukkit.Bukkit;
@@ -17,28 +19,18 @@ public class BingoInventory {
 
     private static final HashMap<String, Inventory> playerInventoryHashMap = new HashMap<String, Inventory>();
 
-    private static ItemStack createItemStack() {
-        ItemStack itemStack = new ItemStack(Material.TURTLE_HELMET, 1);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        assert itemMeta != null;
-        //itemMeta.setDisplayName(ChatColor.GOLD + "Abgeschlossen!" + BingoPlugin.seconds);
-        itemMeta.hasEnchants();
-        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
-    }
-
     public static void createInventory(Player player, int size) {
-        Inventory inventory = Bukkit.createInventory(null, size, "Bingo-Tafel von " + Utils.getDisplayName(player));
+        Inventory inventory = Bukkit.createInventory(null, size * 2, "Bingo-Tafel von " + Utils.getDisplayName(player));
         int i = 0;
         for (Material material : BingoList.getBingoList(player)) {
             inventory.setItem(i, new ItemStack(material));
-            i++;
-        }
-        while (i < inventory.getSize()) {
-            inventory.setItem(i, createItemStack());
-            i++;
+            if(i == 8){
+                i = 18;
+            }else if(i == 26){
+                i = 36;
+            } else{
+                i++;
+            }
         }
         playerInventoryHashMap.put(player.getDisplayName(), inventory);
     }
@@ -56,12 +48,34 @@ public class BingoInventory {
         int i = 0;
         for (Material material : BingoList.getBingoList(player)) {
             inventory.setItem(i, new ItemStack(material));
-            i++;
+            if(i == 8){
+                i = 18;
+            }else if(i == 26){
+                i = 36;
+            } else{
+                i++;
+            }
         }
-        while (i < inventory.getSize()) {
-            inventory.setItem(i, createItemStack());
-            i++;
-        }
+    }
+
+    public static ItemStack convertToLocked(Material material) {
+        ItemStack itemStack = new ItemStack(material, 1);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        assert itemMeta != null;
+        itemMeta.setDisplayName(Utils.colorize("&a" + bingo.Utils.formatMaterialName(material)));
+        itemMeta.hasEnchants();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+        List<String> lore = new ArrayList<String>(){{
+            add(Utils.colorize("&fDu hast dieses Item"));
+            add(Utils.colorize("&fbereits &agefunden"));
+            add(Utils.colorize("&fDas Item bleibt in"));
+            add(Utils.colorize("&fdiesem Slot &cgesperrt!"));
+            add(Utils.colorize("&7Shiftclick um das Item zu erhalten!"));
+        }};
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 
 }
