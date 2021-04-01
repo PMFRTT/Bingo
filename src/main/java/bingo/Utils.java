@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class Utils {
 
-    public static void scatterPlayer(Player player, int scatterSize) {
+    public static void scatterPlayer(Player player, int scatterSize, boolean fromSpawn) {
         Random random = new Random();
         World world = Bukkit.getWorld("world");
         Location location = player.getLocation();
@@ -25,16 +25,21 @@ public class Utils {
             location.setY(world.getHighestBlockYAt((int) x, (int) z));
         } while (location.getBlock().isLiquid());
         location.add(0, 2, 0);
-        player.setBedSpawnLocation(location, true);
-        player.teleport(location);
+        if (fromSpawn) {
+            player.setBedSpawnLocation(location, true);
+            player.teleport(location);
+        } else {
+            player.setBedSpawnLocation(location, true);
+            player.teleport(player.getLocation().add(location.getX(), location.getY(), location.getZ()));
+        }
     }
 
     public static void preparePlayers(int scatterSize) {
         clearPlayers();
         CheckInventory.createLock();
         if (BingoPlugin.scatter) {
-            for(Player player : Bukkit.getOnlinePlayers())
-            scatterPlayer(player, scatterSize);
+            for (Player player : Bukkit.getOnlinePlayers())
+                scatterPlayer(player, scatterSize, true);
         }
     }
 

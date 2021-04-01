@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -49,15 +50,15 @@ public class SideList {
             Player player = Bukkit.getPlayer(name);
             Scoreboard scoreboard = playerScoreboards.get(name);
             for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
-                if (player.getInventory().contains(material)) {
+                if (BingoList.playerCollectedList.get(name).contains(material)) {
+                    removeScore(player, material);
+                    scoreboard.addScore(new Score(core.Utils.colorize("&a" + Utils.formatMaterialName(material)), -1));
+                } else if (player.getInventory().contains(material)) {
                     removeScore(player, material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&b" + Utils.formatMaterialName(material)), 0));
-                } else if (BingoList.playerCollectedList.get(name).contains(material)) {
-                    removeScore(player, material);
-                    scoreboard.addScore(new Score(core.Utils.colorize("&a" + Utils.formatMaterialName(material)), 0));
                 } else {
                     removeScore(player, material);
-                    scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 0));
+                    scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1));
                 }
             }
         }

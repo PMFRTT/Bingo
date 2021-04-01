@@ -54,7 +54,7 @@ public class Teleporter {
         teleporterTimer.resume();
         Utils.sendDebugMessage("&cPlayer has been teleported");
         playerCountdown.put(player.getDisplayName(), teleporterTimer);
-        bingo.Utils.scatterPlayer(player, radius);
+        bingo.Utils.scatterPlayer(player, radius, false);
     }
 
     public static TeleporterTimer getTimer(Player player){
