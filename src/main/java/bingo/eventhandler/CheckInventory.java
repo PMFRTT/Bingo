@@ -2,7 +2,9 @@ package bingo.eventhandler;
 
 import bingo.BingoInventory;
 import bingo.BingoList;
+import bingo.SideList;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -32,14 +34,20 @@ public class CheckInventory {
             Inventory inventory = BingoInventory.getPlayerInventory(player);
             if (inventory.getItem(i + 9) != null) {
                 if (Objects.requireNonNull(inventory.getItem(i)).getType() == Objects.requireNonNull(inventory.getItem(i + 9)).getType()) {
-                    lockSlot(player, i + 9);
-                    BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
-                    inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType()));
-                    BingoInventory.updateInventory(player);
+                    if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
+                        lockSlot(player, i + 9);
+                        BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
+                        inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType()));
+                        BingoInventory.updateInventory(player);
+                        SideList.updateScoreboard();
+                    }
                 } else {
-                    BingoList.removeMaterialFromCollected(player, Objects.requireNonNull(inventory.getItem(i).getType()));
-                    BingoInventory.updateInventory(player);
-                    unlockSlot(player, i + 9);
+                    if (BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
+                        BingoList.removeMaterialFromCollected(player, Objects.requireNonNull(inventory.getItem(i).getType()));
+                        BingoInventory.updateInventory(player);
+                        unlockSlot(player, i + 9);
+                        SideList.updateScoreboard();
+                    }
                 }
             }
         }

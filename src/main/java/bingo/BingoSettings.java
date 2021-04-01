@@ -64,12 +64,6 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7ihre Items &cverlieren &7oder &abehalten"));
         }}, Material.ENDER_EYE, false);
 
-        this.addSetting("Announce Bingo", new ArrayList<String>() {{
-            add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
-            add(Utils.colorize("&7Chat erfahren, dass ein"));
-            add(Utils.colorize("&6Item gefunden &7wurde"));
-        }}, Material.NOTE_BLOCK, false);
-
         this.addSetting("Announce Advancements", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
             add(Utils.colorize("&7Chat erfahren, dass ein"));

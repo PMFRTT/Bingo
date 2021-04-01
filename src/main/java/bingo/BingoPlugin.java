@@ -24,8 +24,6 @@ public final class BingoPlugin extends JavaPlugin {
     private static BingoSettings bingoSettings;
     private int difficulty = 0;
     public static int items = 0;
-    private static boolean singleplayer = false;
-    private boolean announce = true;
     public static SideList sideList;
     private static Timer timer;
     public static boolean scatter;
@@ -74,20 +72,18 @@ public final class BingoPlugin extends JavaPlugin {
         SettingCycle items = (SettingCycle) bingoSettings.getSettingbyName("Items");
         SettingSwitch keepInventory = (SettingSwitch) bingoSettings.getSettingbyName("Keep Inventory");
         SettingSwitch singlePlayer = (SettingSwitch) bingoSettings.getSettingbyName("Singleplayer");
-        SettingSwitch announce = (SettingSwitch) bingoSettings.getSettingbyName("Announce Bingo");
         SettingSwitch advancements = (SettingSwitch) bingoSettings.getSettingbyName("Announce Advancements");
         SettingSwitch scatter = (SettingSwitch) bingoSettings.getSettingbyName("Scatter Players");
         SettingCycle singlePlayerStartTime = (SettingCycle) bingoSettings.singlePlayerSubSettings.getSettingbyName("Start-Zeit");
         SettingCycle scatterPlayerSize = (SettingCycle) bingoSettings.scatterPlayerSubSettings.getSettingbyName("Scatter-Größe");
         this.difficulty = difficulty.getValue();
-        this.announce = announce.getSettingValue();
         this.scatter = scatter.getSettingValue();
         if (advancements.getSettingValue()) {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
         } else {
             Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         }
-        singleplayer = singlePlayer.getSettingValue();
+        boolean singleplayer = singlePlayer.getSettingValue();
         if (keepInventory.getSettingValue()) {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
         }
