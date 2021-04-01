@@ -12,30 +12,29 @@ import java.util.Random;
 
 public class Utils {
 
-    private static void scatterPlayers(int scatterSize) {
+    public static void scatterPlayer(Player player, int scatterSize) {
         Random random = new Random();
         World world = Bukkit.getWorld("world");
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            Location location = player.getLocation();
-            do {
-                double x = (random.nextFloat() - 0.5f) * scatterSize;
-                double z = (random.nextFloat() - 0.5f) * scatterSize;
-                location.setX(x);
-                location.setZ(z);
-                assert world != null;
-                location.setY(world.getHighestBlockYAt((int) x, (int) z));
-            } while (location.getBlock().isLiquid());
-            location.add(0, 2, 0);
-            player.setBedSpawnLocation(location, true);
-            player.teleport(location);
-        }
+        Location location = player.getLocation();
+        do {
+            double x = (random.nextFloat() - 0.5f) * scatterSize;
+            double z = (random.nextFloat() - 0.5f) * scatterSize;
+            location.setX(x);
+            location.setZ(z);
+            assert world != null;
+            location.setY(world.getHighestBlockYAt((int) x, (int) z));
+        } while (location.getBlock().isLiquid());
+        location.add(0, 2, 0);
+        player.setBedSpawnLocation(location, true);
+        player.teleport(location);
     }
 
     public static void preparePlayers(int scatterSize) {
         clearPlayers();
         CheckInventory.createLock();
         if (BingoPlugin.scatter) {
-            scatterPlayers(scatterSize);
+            for(Player player : Bukkit.getOnlinePlayers())
+            scatterPlayer(player, scatterSize);
         }
     }
 

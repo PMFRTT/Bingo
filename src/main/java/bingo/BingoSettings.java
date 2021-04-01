@@ -64,11 +64,11 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7ihre Items &cverlieren &7oder &abehalten"));
         }}, Material.ENDER_EYE, false);
 
-        this.addSetting("Announce Advancements", new ArrayList<String>() {{
+        /*this.addSetting("Announce Advancements", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
             add(Utils.colorize("&7Chat erfahren, dass ein"));
             add(Utils.colorize("&6Advancement erreicht &7wurde"));
-        }}, Material.NOTE_BLOCK, false);
+        }}, Material.NOTE_BLOCK, false);*/
 
         this.addSetting("Scatter Players", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Spieler"));
@@ -80,7 +80,7 @@ public class BingoSettings extends PluginSettings {
 
         scatterPlayerSubSettings.addSetting("Scatter-Größe", new ArrayList<String>() {{
             add(Utils.colorize("&7Hier kannst du einstellen,"));
-            add(Utils.colorize("&7wie &6groß der Radius&7 des "));
+            add(Utils.colorize("&7wie groß der &6Radius&7 des "));
             add(Utils.colorize("&7Scatterns sein soll"));
         }}, Material.CARTOGRAPHY_TABLE, new ArrayList<Integer>() {{
             add(100);
@@ -112,13 +112,6 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
         }}, Material.TOTEM_OF_UNDYING, false, singlePlayerSubSettings);
 
-        this.addSetting("Teleporter", new ArrayList<String>() {{
-            add(Utils.colorize("&7Ermöglicht dem Spieler sich"));
-            add(Utils.colorize("&7entweder einmalig oder mit einem"));
-            add(Utils.colorize("&7Countdown zu &ateleportieren!"));
-            add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
-        }}, Material.ENDERMAN_SPAWN_EGG, false, teleporterSubSettings);
-
         singlePlayerSubSettings.addSetting("Start-Zeit", new ArrayList<String>() {{
             add(core.Utils.colorize("&7Hier kannst du einstellen, mit wie"));
             add(core.Utils.colorize("&7viel &6Zeit &7du in dem"));
@@ -146,6 +139,57 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&a9 Minuten"));
             add(Utils.colorize("&a10 Minuten"));
         }});
+
+        this.addSetting("Teleporter", new ArrayList<String>() {{
+            add(Utils.colorize("&7Ermöglicht dem Spieler sich"));
+            add(Utils.colorize("&7entweder einmalig oder mit einem"));
+            add(Utils.colorize("&7Countdown zu &ateleportieren!"));
+            add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
+        }}, Material.ENDERMAN_SPAWN_EGG, false, teleporterSubSettings);
+
+        teleporterSubSettings.addSetting("Countdown", new ArrayList<String>(){{
+            add(Utils.colorize("&7Wenn diese Einstellung aktiv ist,"));
+            add(Utils.colorize("&7kann der Teleporter &6wiederholt nach"));
+            add(Utils.colorize("&6einer bestimmten Zeit &7genutzt werden!"));
+        }}, Material.CLOCK, true);
+
+        teleporterSubSettings.addSetting("Countdown-Zeit", new ArrayList<String>(){{
+            add(Utils.colorize("&7Hier legst du fest, &6wie lange&7 ein"));
+            add(Utils.colorize("&7Spieler &6warten &7muss, bis er sich"));
+            add(Utils.colorize("&7wieder teleportieren kann!"));
+        }}, Material.NAUTILUS_SHELL, new ArrayList<Integer>(){{
+            add(120);
+            add(300);
+            add(600);
+        }}, new ArrayList<String>(){{
+            add(Utils.colorize("&b2 Minuten"));
+            add(Utils.colorize("&b5 Minuten"));
+            add(Utils.colorize("&b10 Minuten"));
+        }});
+
+        teleporterSubSettings.addSetting("Teleporter-Radius", new ArrayList<String>() {{
+            add(Utils.colorize("&7Hier kannst du einstellen,"));
+            add(Utils.colorize("&7wie groß der &6Radius&7 des "));
+            add(Utils.colorize("&7Telportierens sein soll"));
+        }}, Material.CARTOGRAPHY_TABLE, new ArrayList<Integer>() {{
+            add(100);
+            add(250);
+            add(500);
+            add(750);
+            add(1000);
+            add(1500);
+            add(2000);
+        }}, new ArrayList<String>() {{
+            add(Utils.colorize("&b100 &fBlöcke"));
+            add(Utils.colorize("&b250 &fBlöcke"));
+            add(Utils.colorize("&b500 &fBlöcke"));
+            add(Utils.colorize("&b750 &fBlöcke"));
+            add(Utils.colorize("&b1000 &fBlöcke"));
+            add(Utils.colorize("&b1500 &fBlöcke"));
+            add(Utils.colorize("&b2000 &fBlöcke"));
+        }});
+
+
 
         //this.addSetting();
     }

@@ -3,6 +3,8 @@ package bingo.commandExecutor;
 import bingo.BingoInventory;
 import bingo.BingoList;
 import bingo.BingoPlugin;
+import bingo.teleporter.Teleporter;
+import bingo.teleporter.TeleporterTimer;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,7 +56,17 @@ public class BingoCommandExecutor implements CommandExecutor {
                 }
             }
         } else if (command.getLabel().equalsIgnoreCase("rtp")) {
-
+            assert player != null;
+            if (BingoPlugin.tpEnabled) {
+                if (Teleporter.canTP(player)) {
+                    Teleporter.teleport(player);
+                    player.sendMessage(Utils.getPrefix("Teleporter") + Utils.colorize("Du wurdest &ateleportiert&f!"));
+                } else {
+                    player.sendMessage(Utils.getPrefix("Teleporter") + Utils.colorize("Du musst noch &b" + Utils.formatTimerTimeText(Teleporter.getTimer(player).getSeconds()) + "&f warten!"));
+                }
+            } else {
+                player.sendMessage(Utils.getPrefix("Teleporter") + Utils.colorize("Das Teleport-Feature ist &cdeaktiviert&f!"));
+            }
             return false;
         }
 

@@ -5,6 +5,7 @@ import bingo.commandExecutor.ResetCommandExecutor;
 import bingo.commandExecutor.TopCommandExecutor;
 import bingo.eventhandler.BingoEventhandler;
 import bingo.eventhandler.CheckInventory;
+import bingo.teleporter.Teleporter;
 import core.core.CoreMain;
 import core.Utils;
 import core.timer.Timer;
@@ -20,19 +21,21 @@ import java.util.*;
 
 public final class BingoPlugin extends JavaPlugin {
 
-    private final BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
     private static BingoSettings bingoSettings;
-    private int difficulty = 0;
+    private static int difficulty = 0;
+    private static Timer timer;
+
     public static int items = 0;
     public static SideList sideList;
-    private static Timer timer;
     public static boolean scatter;
+    public static boolean tpEnabled = false;
 
     @Override
     public void onEnable() {
 
         CoreMain.setPlugin(this);
         timer = new Timer(this, TimerType.INCREASING, "Das Bingo läuft seit: &b", "&cDas Bingo ist pausiert", false);
+        BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
         bingoEventhandler.initialize();
         bingoSettings = new BingoSettings(this);
         BingoCommandExecutor bingoCommandExecutor = new BingoCommandExecutor(this);
@@ -72,17 +75,15 @@ public final class BingoPlugin extends JavaPlugin {
         SettingCycle items = (SettingCycle) bingoSettings.getSettingbyName("Items");
         SettingSwitch keepInventory = (SettingSwitch) bingoSettings.getSettingbyName("Keep Inventory");
         SettingSwitch singlePlayer = (SettingSwitch) bingoSettings.getSettingbyName("Singleplayer");
-        SettingSwitch advancements = (SettingSwitch) bingoSettings.getSettingbyName("Announce Advancements");
         SettingSwitch scatter = (SettingSwitch) bingoSettings.getSettingbyName("Scatter Players");
         SettingCycle singlePlayerStartTime = (SettingCycle) bingoSettings.singlePlayerSubSettings.getSettingbyName("Start-Zeit");
         SettingCycle scatterPlayerSize = (SettingCycle) bingoSettings.scatterPlayerSubSettings.getSettingbyName("Scatter-Größe");
+        SettingCycle teleportTime = (SettingCycle) bingoSettings.teleporterSubSettings.getSettingbyName("Countdown-Zeit");
+        SettingCycle teleportRange = (SettingCycle) bingoSettings.teleporterSubSettings.getSettingbyName("Teleporter-Radius");
+        SettingSwitch enabletp = (SettingSwitch) bingoSettings.getSettingbyName("Teleporter");
         this.difficulty = difficulty.getValue();
-        this.scatter = scatter.getSettingValue();
-        if (advancements.getSettingValue()) {
-            Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
-        } else {
-            Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-        }
+        tpEnabled = enabletp.getSettingValue();
+        BingoPlugin.scatter = scatter.getSettingValue();
         boolean singleplayer = singlePlayer.getSettingValue();
         if (keepInventory.getSettingValue()) {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
@@ -92,10 +93,16 @@ public final class BingoPlugin extends JavaPlugin {
             timer.setSeconds(singlePlayerStartTime.getValue());
             timer.setSingle(true);
         }
-        this.items = items.getValue();
+        BingoPlugin.items = items.getValue();
+        int teleporterRadius = teleportRange.getValue();
+        int teleporterTime = teleportTime.getValue();
         BingoList.populatePlayerBingoList(difficulty.getValue(), items.getValue());
         bingo.Utils.preparePlayers(scatterPlayerSize.getValue());
         sideList.init();
+        if (enabletp.getSettingValue()) {
+            Teleporter teleporter = new Teleporter(this, true, teleporterTime, teleporterRadius);
+            teleporter.init();
+        }
         timer.resume();
     }
 
