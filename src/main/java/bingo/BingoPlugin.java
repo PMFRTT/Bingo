@@ -88,6 +88,7 @@ public final class BingoPlugin extends JavaPlugin {
         if (keepInventory.getSettingValue()) {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
         }
+        Utils.changeGamerule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
         if (singleplayer) {
             timer.setTimerType(TimerType.DECREASING);
             timer.setSeconds(singlePlayerStartTime.getValue());
