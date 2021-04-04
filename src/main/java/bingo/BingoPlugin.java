@@ -8,6 +8,8 @@ import bingo.eventhandler.CheckInventory;
 import bingo.teleporter.Teleporter;
 import core.core.CoreMain;
 import core.Utils;
+import core.debug.DebugSender;
+import core.debug.DebugType;
 import core.timer.Timer;
 import core.settings.Setting.SettingCycle;
 import core.settings.Setting.SettingSwitch;
@@ -68,6 +70,9 @@ public final class BingoPlugin extends JavaPlugin {
                 }
             }
         }, 0L, 1);
+
+        DebugSender.sendDebug(DebugType.PLUGIN, "bingo loaded", "Bingo");
+
     }
 
     public void startBingo() {

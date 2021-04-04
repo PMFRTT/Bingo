@@ -44,6 +44,7 @@ public class BingoEventhandler implements Listener {
         if (BingoInventory.getAllInventories().containsValue(e.getInventory())) {
             if (e.getClick().isShiftClick()) {
                 if (e.getClickedInventory() == e.getWhoClicked().getInventory()) {
+                    SideList.updateScoreboard();
                     e.setCancelled(true);
                 }
             }
@@ -54,12 +55,13 @@ public class BingoEventhandler implements Listener {
                         BingoList.removeMaterialFromCollected((Player) e.getWhoClicked(), e.getCurrentItem().getType());
                         e.getInventory().setItem(e.getRawSlot(), new ItemStack(Material.AIR));
                         CheckInventory.unlockSlot((Player) e.getWhoClicked(), e.getSlot());
-                        SideList.updateScoreboard();
                     }
+                    SideList.updateScoreboard();
                     e.setCancelled(true);
                 }
             } else if (CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot())) {
                 if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
+                    SideList.updateScoreboard();
                     e.setCancelled(true);
                 }
             }

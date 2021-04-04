@@ -1,6 +1,8 @@
 package bingo;
 
 import bingo.eventhandler.CheckInventory;
+import core.debug.DebugSender;
+import core.debug.DebugType;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,6 +43,7 @@ public class Utils {
             for (Player player : Bukkit.getOnlinePlayers())
                 scatterPlayer(player, scatterSize, true);
         }
+        DebugSender.sendDebug(DebugType.PLUGIN, "players have been prepared", "Bingo");
     }
 
     private static void clearPlayers() {

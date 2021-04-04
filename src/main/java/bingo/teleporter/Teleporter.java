@@ -2,6 +2,8 @@ package bingo.teleporter;
 
 import bingo.BingoPlugin;
 import core.Utils;
+import core.debug.DebugSender;
+import core.debug.DebugType;
 import core.timer.TimerType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -52,7 +54,7 @@ public class Teleporter {
         TeleporterTimer teleporterTimer = playerCountdown.get(player.getDisplayName());
         teleporterTimer.setSeconds(time);
         teleporterTimer.resume();
-        Utils.sendDebugMessage("&cPlayer has been teleported");
+        DebugSender.sendDebug(DebugType.PLUGIN, "player has been teleported", "Bingo");
         playerCountdown.put(player.getDisplayName(), teleporterTimer);
         bingo.Utils.scatterPlayer(player, radius, false);
     }

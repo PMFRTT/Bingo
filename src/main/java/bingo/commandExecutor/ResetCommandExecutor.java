@@ -2,6 +2,8 @@ package bingo.commandExecutor;
 
 import bingo.BingoPlugin;
 import core.core.CoreResetServer;
+import core.debug.DebugSender;
+import core.debug.DebugType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +19,8 @@ public class ResetCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equalsIgnoreCase("reset")){
+        if (command.getName().equalsIgnoreCase("reset")) {
+            DebugSender.sendDebug(DebugType.SERVER, "resetting");
             CoreResetServer.resetServer(bingo.getName(), true);
             return true;
         }
