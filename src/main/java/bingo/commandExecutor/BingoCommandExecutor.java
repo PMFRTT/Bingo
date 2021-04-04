@@ -36,9 +36,14 @@ public class BingoCommandExecutor implements CommandExecutor {
 
         if (command.getLabel().equalsIgnoreCase("Bingo")) {
             if (args.length == 0) {
-                assert player != null;
-                BingoInventory.updateInventory(player);
-                player.openInventory(BingoInventory.getPlayerInventory(player));
+                if (!BingoPlugin.getTimer().isPaused()) {
+                    assert player != null;
+                    BingoInventory.updateInventory(player);
+                    player.openInventory(BingoInventory.getPlayerInventory(player));
+                }else{
+                    assert player != null;
+                    player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Das Bingo hat noch &cnicht begonnen&f!"));
+                }
             }
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("settings")) {

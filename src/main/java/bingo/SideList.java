@@ -1,5 +1,7 @@
 package bingo;
 
+import core.debug.DebugSender;
+import core.debug.DebugType;
 import core.scoreboard.Score;
 import core.scoreboard.Scoreboard;
 import core.scoreboard.ScoreboardDisplay;
@@ -9,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -46,7 +47,6 @@ public class SideList {
 
     public static void updateScoreboard() {
         for (String name : playerScoreboards.keySet()) {
-            System.out.println("updating");
             Player player = Bukkit.getPlayer(name);
             Scoreboard scoreboard = playerScoreboards.get(name);
             for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
@@ -76,6 +76,7 @@ public class SideList {
         for (String name : playerScoreboards.keySet()) {
             playerScoreboardsDisplay.get(name).renderScoreboard(playerScoreboards.get(name));
         }
+        DebugSender.sendDebug(DebugType.GUI, "rendered sidelist", "Sidelist");
     }
 
 }
