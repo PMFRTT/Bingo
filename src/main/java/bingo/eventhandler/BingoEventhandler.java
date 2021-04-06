@@ -41,6 +41,7 @@ public class BingoEventhandler implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+        SideList.updateScoreboard();
         if (BingoInventory.getAllInventories().containsValue(e.getInventory())) {
             if (e.getClick().isShiftClick()) {
                 if (e.getClickedInventory() == e.getWhoClicked().getInventory()) {
