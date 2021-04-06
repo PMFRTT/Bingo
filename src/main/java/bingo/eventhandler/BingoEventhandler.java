@@ -41,7 +41,6 @@ public class BingoEventhandler implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        SideList.updateScoreboard();
         if (BingoInventory.getAllInventories().containsValue(e.getInventory())) {
             if (e.getClick().isShiftClick()) {
                 if (e.getClickedInventory() == e.getWhoClicked().getInventory()) {
@@ -67,6 +66,16 @@ public class BingoEventhandler implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onInvClick(InventoryClickEvent e){
+        Bukkit.getScheduler().scheduleSyncDelayedTask(bingo, new Runnable() {
+            @Override
+            public void run() {
+                SideList.updateScoreboard();
+            }
+        }, 5L);
     }
 
     @EventHandler
