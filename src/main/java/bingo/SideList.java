@@ -64,6 +64,7 @@ public class SideList {
                     scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1));
                 }
             }
+            startRender(player);
         }
     }
 
