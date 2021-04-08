@@ -5,6 +5,7 @@ import bingo.commandExecutor.ResetCommandExecutor;
 import bingo.commandExecutor.TopCommandExecutor;
 import bingo.eventhandler.BingoEventhandler;
 import bingo.eventhandler.CheckInventory;
+import bingo.teleporter.Respawner;
 import bingo.teleporter.Teleporter;
 import core.core.CoreMain;
 import core.Utils;
@@ -32,6 +33,8 @@ public final class BingoPlugin extends JavaPlugin {
     public static boolean scatter;
     public static boolean tpEnabled = false;
 
+    public static Respawner respawner;
+
     @Override
     public void onEnable() {
 
@@ -44,6 +47,7 @@ public final class BingoPlugin extends JavaPlugin {
         TopCommandExecutor topCommandExecutor = new TopCommandExecutor();
         ResetCommandExecutor resetCommandExecutor = new ResetCommandExecutor(this);
         sideList = new SideList(this);
+        respawner = new Respawner(this);
 
         Objects.requireNonNull(getCommand("Bingo")).setExecutor(bingoCommandExecutor);
         Objects.requireNonNull(getCommand("Top")).setExecutor(topCommandExecutor);

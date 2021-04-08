@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -28,7 +29,9 @@ public class SideList {
 
     public void init() {
         createPlayerScoreBoards();
-        startRender();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            startRender(player);
+        }
     }
 
     public void createPlayerScoreBoards() {
@@ -62,7 +65,6 @@ public class SideList {
                 }
             }
         }
-        startRender();
     }
 
     private static void removeScore(Player player, Material material) {
@@ -72,10 +74,8 @@ public class SideList {
         scoreboard.removeScoreByName(core.Utils.colorize("&c" + Utils.formatMaterialName(material)));
     }
 
-    private static void startRender() {
-        for (String name : playerScoreboards.keySet()) {
-            playerScoreboardsDisplay.get(name).renderScoreboard(playerScoreboards.get(name));
-        }
+    private static void startRender(Player player) {
+        playerScoreboardsDisplay.get(player.getDisplayName()).renderScoreboard(playerScoreboards.get(player.getDisplayName()));
         DebugSender.sendDebug(DebugType.GUI, "rendered sidelist", "Sidelist");
     }
 
