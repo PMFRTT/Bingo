@@ -33,6 +33,7 @@ public final class BingoPlugin extends JavaPlugin {
     public static SideList sideList;
     public static boolean scatter;
     public static boolean tpEnabled = false;
+    public static boolean banningEnabled = false;
 
     public static Respawner respawner;
 
@@ -95,6 +96,7 @@ public final class BingoPlugin extends JavaPlugin {
         SettingSwitch banning = (SettingSwitch) bingoSettings.getSettingbyName("Items Bannen");
         SettingCycle banningItems = (SettingCycle) bingoSettings.banningSettings.getSettingbyName("Anzahl der Items");
         this.difficulty = difficulty.getValue();
+        banningEnabled = banning.getSettingValue();
         tpEnabled = enabletp.getSettingValue();
         BingoPlugin.scatter = scatter.getSettingValue();
         boolean singleplayer = singlePlayer.getSettingValue();

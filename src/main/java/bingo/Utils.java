@@ -50,27 +50,34 @@ public class Utils {
     public static void preparePlayers(int scatterSize) {
         clearPlayers();
         CheckInventory.createLock();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.openInventory(BingoInventory.getPlayerInventory(player));
-        }
-        BukkitTask runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                boolean done = true;
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (BingoInventory.bannedItem.get(player.getDisplayName()).size() != BingoPlugin.bannableItems) {
-                        done = false;
-                    }
-                }
-                if (done) {
-                    if (BingoPlugin.scatter) {
-                        for (Player player : Bukkit.getOnlinePlayers())
-                            scatterPlayer(player, scatterSize, true);
-                    }
-                    cancel();
-                }
+        if (BingoPlugin.banningEnabled) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.openInventory(BingoInventory.getPlayerInventory(player));
             }
-        }.runTaskTimer(main, 0, 1L);
+            BukkitTask runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    boolean done = true;
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (BingoInventory.bannedItem.get(player.getDisplayName()).size() != BingoPlugin.bannableItems) {
+                            done = false;
+                        }
+                    }
+                    if (done) {
+                        if (BingoPlugin.scatter) {
+                            for (Player player : Bukkit.getOnlinePlayers())
+                                scatterPlayer(player, scatterSize, true);
+                        }
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(main, 0, 1L);
+        } else {
+            if (BingoPlugin.scatter) {
+                for (Player player : Bukkit.getOnlinePlayers())
+                    scatterPlayer(player, scatterSize, true);
+            }
+        }
         DebugSender.sendDebug(DebugType.PLUGIN, "players have been prepared", "Bingo");
     }
 

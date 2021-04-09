@@ -197,6 +197,7 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7Hier kannst du einstellen,"));
             add(Utils.colorize("&7ob Spieler vor Beginn des"));
             add(Utils.colorize("&7Spiels Items bannen können"));
+            add(Utils.colorize("&8Shift + Rechtsclick -> Einstellungen"));
         }}, Material.STRUCTURE_VOID, false, banningSettings);
 
         banningSettings.addSetting("Anzahl der Items", new ArrayList<String>(){{
