@@ -20,7 +20,7 @@
 
     <build>
         <finalName>
-            ${project.artifactId}
+            ${project.artifactId}-${project.version}
         </finalName>
         <defaultGoal>clean package</defaultGoal>
         <plugins>

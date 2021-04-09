@@ -19,7 +19,7 @@ public class Respawner implements Listener {
 
     private static HashMap<String, Location> deathMap = new HashMap<String, Location>();
 
-    public Respawner(BingoPlugin plugin){
+    public Respawner(BingoPlugin plugin) {
         this.plugin = plugin;
         initialize();
     }
@@ -29,16 +29,22 @@ public class Respawner implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e){
+    public void onPlayerDeath(PlayerDeathEvent e) {
         deathMap.put(e.getEntity().getDisplayName(), e.getEntity().getLocation());
     }
 
-    public static void respawn(Player player){
-        if(deathMap.containsKey(player.getDisplayName())){
+    public static void respawn(Player player) {
+        if (deathMap.containsKey(player.getDisplayName())) {
             World world = player.getWorld();
-            world.getBlockAt(deathMap.get(player.getDisplayName())).setType(Material.GLASS);
-            player.teleport(deathMap.get(player.getDisplayName()).add(0, 2, 0));
-            player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du wurdest an die Stelle deines letzten Todes teleportiert!"));
+            if (deathMap.get(player.getDisplayName()).getBlock().isLiquid()) {
+                world.getBlockAt(deathMap.get(player.getDisplayName()).add(0, 3, 0)).setType(Material.GLASS);
+                player.teleport(deathMap.get(player.getDisplayName()).add(0, 5, 0));
+                player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du wurdest an die Stelle deines letzten Todes teleportiert!"));
+            }else{
+                world.getBlockAt(deathMap.get(player.getDisplayName()).add(0, 0, 0)).setType(Material.GLASS);
+                player.teleport(deathMap.get(player.getDisplayName()).add(0, 2, 0));
+                player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du wurdest an die Stelle deines letzten Todes teleportiert!"));
+            }
         }
     }
 }
