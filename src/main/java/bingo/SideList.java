@@ -13,7 +13,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 
@@ -78,6 +77,11 @@ public class SideList {
     private static void startRender(Player player) {
         playerScoreboardsDisplay.get(player.getDisplayName()).renderScoreboard(playerScoreboards.get(player.getDisplayName()));
         DebugSender.sendDebug(DebugType.GUI, "rendered sidelist", "Sidelist");
+    }
+
+    public static void removePlayer(Player player){
+        playerScoreboards.remove(player.getDisplayName());
+        playerScoreboardsDisplay.remove(player.getDisplayName());
     }
 
 }

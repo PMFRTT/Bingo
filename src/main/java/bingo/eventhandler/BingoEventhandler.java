@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BingoEventhandler implements Listener {
@@ -84,5 +85,11 @@ public class BingoEventhandler implements Listener {
             BingoPlugin.sideList.createPlayerScoreBoards();
             SideList.updateScoreboard();
         }
+    }
+
+    @EventHandler
+    public void onPlayerDisconnect(PlayerQuitEvent e){
+        Player player = e.getPlayer();
+        SideList.removePlayer(player);
     }
 }
