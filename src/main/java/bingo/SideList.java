@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -51,6 +52,10 @@ public class SideList {
         for (String name : playerScoreboards.keySet()) {
             Player player = Bukkit.getPlayer(name);
             Scoreboard scoreboard = playerScoreboards.get(name);
+            List<String> scores = new ArrayList<String>();
+            for (Score score : scoreboard.getScores()) {
+                scores.add(score.getContent());
+            }
             for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
                 if (BingoList.playerCollectedList.get(name).contains(material)) {
                     removeScore(player, material);
@@ -63,7 +68,15 @@ public class SideList {
                     scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1));
                 }
             }
-            startRender(player);
+            int i = 0;
+            for (Score score : scoreboard.getScores()) {
+                if (scores.contains(score.getContent())) {
+                    i++;
+                }
+            }
+            if (i != BingoPlugin.items) {
+                startRender(player);
+            }
         }
     }
 
@@ -79,7 +92,7 @@ public class SideList {
         DebugSender.sendDebug(DebugType.GUI, "rendered sidelist", "Sidelist");
     }
 
-    public static void removePlayer(Player player){
+    public static void removePlayer(Player player) {
         playerScoreboards.remove(player.getDisplayName());
         playerScoreboardsDisplay.remove(player.getDisplayName());
     }
