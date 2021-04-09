@@ -3,6 +3,7 @@ package bingo.commandExecutor;
 import bingo.BingoInventory;
 import bingo.BingoList;
 import bingo.BingoPlugin;
+import bingo.teleporter.Respawner;
 import bingo.teleporter.Teleporter;
 import bingo.teleporter.TeleporterTimer;
 import org.bukkit.*;
@@ -58,6 +59,8 @@ public class BingoCommandExecutor implements CommandExecutor {
                     BingoPlugin.getTimer().pause();
                     BingoList.getBingoList().clear();
                     BingoList.playerBingoLists.clear();
+                }else if(args[0].equalsIgnoreCase("respawn")){
+                    Respawner.respawn(player);
                 }
             }
         } else if (command.getLabel().equalsIgnoreCase("rtp")) {

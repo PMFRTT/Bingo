@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 public class Utils {
@@ -32,7 +33,9 @@ public class Utils {
             player.teleport(location);
         } else {
             player.setBedSpawnLocation(location, true);
-            player.teleport(player.getLocation().add(location.getX(), location.getY(), location.getZ()));
+            Location location1 = player.getLocation().add(location.getX(), 0, location.getZ());
+            location1.setY(world.getHighestBlockYAt(location1));
+            player.teleport(location1);
         }
     }
 

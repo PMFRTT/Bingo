@@ -13,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -28,7 +29,9 @@ public class SideList {
 
     public void init() {
         createPlayerScoreBoards();
-        startRender();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            startRender(player);
+        }
     }
 
     public void createPlayerScoreBoards() {
@@ -49,6 +52,10 @@ public class SideList {
         for (String name : playerScoreboards.keySet()) {
             Player player = Bukkit.getPlayer(name);
             Scoreboard scoreboard = playerScoreboards.get(name);
+            List<String> scores = new ArrayList<String>();
+            for (Score score : scoreboard.getScores()) {
+                scores.add(score.getContent());
+            }
             for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
                 if (BingoList.playerCollectedList.get(name).contains(material)) {
                     removeScore(player, material);
@@ -61,8 +68,16 @@ public class SideList {
                     scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1));
                 }
             }
+            int i = 0;
+            for (Score score : scoreboard.getScores()) {
+                if (scores.contains(score.getContent())) {
+                    i++;
+                }
+            }
+            if (i != BingoPlugin.items) {
+                startRender(player);
+            }
         }
-        startRender();
     }
 
     private static void removeScore(Player player, Material material) {
@@ -72,11 +87,14 @@ public class SideList {
         scoreboard.removeScoreByName(core.Utils.colorize("&c" + Utils.formatMaterialName(material)));
     }
 
-    private static void startRender() {
-        for (String name : playerScoreboards.keySet()) {
-            playerScoreboardsDisplay.get(name).renderScoreboard(playerScoreboards.get(name));
-        }
+    private static void startRender(Player player) {
+        playerScoreboardsDisplay.get(player.getDisplayName()).renderScoreboard(playerScoreboards.get(player.getDisplayName()));
         DebugSender.sendDebug(DebugType.GUI, "rendered sidelist", "Sidelist");
+    }
+
+    public static void removePlayer(Player player) {
+        playerScoreboards.remove(player.getDisplayName());
+        playerScoreboardsDisplay.remove(player.getDisplayName());
     }
 
 }
