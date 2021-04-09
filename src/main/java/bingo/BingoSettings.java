@@ -14,6 +14,7 @@ public class BingoSettings extends PluginSettings {
     SubSettings singlePlayerSubSettings;
     SubSettings scatterPlayerSubSettings;
     SubSettings teleporterSubSettings;
+    SubSettings banningSettings;
 
     public BingoSettings(Plugin plugin) {
         super(plugin.getName() + "-Einstellungen", plugin);
@@ -30,6 +31,7 @@ public class BingoSettings extends PluginSettings {
         singlePlayerSubSettings = new SubSettings("Singleplayer-Einstellungen", plugin, this);
         scatterPlayerSubSettings = new SubSettings("Scatter-Einstellungen", plugin, this);
         teleporterSubSettings = new SubSettings("Teleporter-Einstellungen", plugin, this);
+        banningSettings = new SubSettings("Items Bannen Einstellungen", plugin, this);
 
         this.addSetting("Items", new ArrayList<String>() {{
             add(Utils.colorize("&7Mit dieser Einstellung kannst du wählen"));
@@ -179,6 +181,7 @@ public class BingoSettings extends PluginSettings {
             add(1000);
             add(1500);
             add(2000);
+            add(5000);
         }}, new ArrayList<String>() {{
             add(Utils.colorize("&b100 &fBlöcke"));
             add(Utils.colorize("&b250 &fBlöcke"));
@@ -187,10 +190,39 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&b1000 &fBlöcke"));
             add(Utils.colorize("&b1500 &fBlöcke"));
             add(Utils.colorize("&b2000 &fBlöcke"));
+            add(Utils.colorize("&b5000 Blöcke"));
         }});
 
+        this.addSetting("Items Bannen", new ArrayList<String>(){{
+            add(Utils.colorize("&7Hier kannst du einstellen,"));
+            add(Utils.colorize("&7ob Spieler vor Beginn des"));
+            add(Utils.colorize("&7Spiels Items bannen können"));
+        }}, Material.STRUCTURE_VOID, false, banningSettings);
 
+        banningSettings.addSetting("Anzahl der Items", new ArrayList<String>(){{
+            add(Utils.colorize("&7Hier kannst du einstellen,"));
+            add(Utils.colorize("&7wieviele Items ein Spieler &6bannen&7 kann"));
+        }}, Material.CACTUS, new ArrayList<Integer>(){{
+            add(1);
+            add(2);
+            add(3);
+            add(4);
+            add(5);
+            add(6);
+            add(7);
+            add(8);
+            add(9);
+        }}, new ArrayList<String>(){{
+            add(Utils.colorize("&b1 &fItem"));
+            add(Utils.colorize("&b2 &fItems"));
+            add(Utils.colorize("&b3 &fItems"));
+            add(Utils.colorize("&b4 &fItems"));
+            add(Utils.colorize("&b5 &fItems"));
+            add(Utils.colorize("&b6 &fItems"));
+            add(Utils.colorize("&b7 &fItems"));
+            add(Utils.colorize("&b8 &fItems"));
+            add(Utils.colorize("&b9 &fItems"));
+        }});
 
-        //this.addSetting();
     }
 }

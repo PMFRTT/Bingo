@@ -9,11 +9,19 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.time.LocalDate;
 import java.util.Random;
 
 public class Utils {
+
+    private static Plugin main;
+
+    public Utils(BingoPlugin main) {
+        Utils.main = main;
+    }
 
     public static void scatterPlayer(Player player, int scatterSize, boolean fromSpawn) {
         Random random = new Random();
@@ -42,10 +50,27 @@ public class Utils {
     public static void preparePlayers(int scatterSize) {
         clearPlayers();
         CheckInventory.createLock();
-        if (BingoPlugin.scatter) {
-            for (Player player : Bukkit.getOnlinePlayers())
-                scatterPlayer(player, scatterSize, true);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.openInventory(BingoInventory.getPlayerInventory(player));
         }
+        BukkitTask runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                boolean done = true;
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    if (BingoInventory.bannedItem.get(player.getDisplayName()).size() != BingoPlugin.bannableItems) {
+                        done = false;
+                    }
+                }
+                if (done) {
+                    if (BingoPlugin.scatter) {
+                        for (Player player : Bukkit.getOnlinePlayers())
+                            scatterPlayer(player, scatterSize, true);
+                    }
+                    cancel();
+                }
+            }
+        }.runTaskTimer(main, 0, 1L);
         DebugSender.sendDebug(DebugType.PLUGIN, "players have been prepared", "Bingo");
     }
 

@@ -4,6 +4,8 @@ import bingo.BingoInventory;
 import bingo.BingoList;
 import bingo.BingoPlugin;
 import bingo.SideList;
+import com.sun.tools.javac.comp.Check;
+import core.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,33 +20,36 @@ import org.bukkit.inventory.ItemStack;
 
 public class BingoEventhandler implements Listener {
 
-    BingoPlugin bingo;
+    BingoPlugin main;
 
-    public BingoEventhandler(BingoPlugin bingo) {
-        this.bingo = bingo;
+    public BingoEventhandler(BingoPlugin main) {
+        this.main = main;
     }
 
     public void initialize() {
-        Bukkit.getPluginManager().registerEvents(this, bingo);
+        Bukkit.getPluginManager().registerEvents(this, main);
     }
 
     @EventHandler
     public void onPlayerPickUp(EntityPickupItemEvent e) {
         if (e.getEntity() instanceof Player) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(bingo, SideList::updateScoreboard, 1L);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(main, SideList::updateScoreboard, 1L);
         }
     }
 
     @EventHandler
     public void onPlayerDrop(PlayerDropItemEvent e) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(bingo, SideList::updateScoreboard, 1L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, SideList::updateScoreboard, 1L);
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
+
+        Player player = (Player) e.getWhoClicked();
+
         if (BingoInventory.getAllInventories().containsValue(e.getInventory())) {
             if (e.getClick().isShiftClick()) {
-                if (e.getClickedInventory() == e.getWhoClicked().getInventory()) {
+                if (e.getClickedInventory() == player.getInventory()) {
                     SideList.updateScoreboard();
                     e.setCancelled(true);
                 }
@@ -60,18 +65,30 @@ public class BingoEventhandler implements Listener {
                     SideList.updateScoreboard();
                     e.setCancelled(true);
                 }
-            } else if (CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot())) {
-                if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
-                    SideList.updateScoreboard();
-                    e.setCancelled(true);
+            } else {
+                if (CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot()) || !CheckInventory.playerBans.get(player.getDisplayName()).contains(e.getSlot())) {
+                    if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
+                        if (BingoInventory.bannedItem.get(player.getDisplayName()).size() < BingoPlugin.bannableItems) {
+                            if (!e.getCurrentItem().getType().equals(Material.BARRIER)) {
+                                CheckInventory.playerBans.get(player.getDisplayName()).add(e.getSlot());
+                                BingoInventory.bannedItem.get(player.getDisplayName()).add(e.getCurrentItem().getType());
+                                BingoList.addMaterialToCollected((Player) e.getWhoClicked(), e.getCurrentItem().getType());
+                                player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du hast &c" + bingo.Utils.formatMaterialName(e.getCurrentItem().getType()) + " &ferfolgreich &cgebannt&f!"));
+                            }else{
+                                player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Dieses Item hast du bereits &cgebannt&f!"));
+                            }
+                        }
+                        SideList.updateScoreboard();
+                        e.setCancelled(true);
+                    }
                 }
             }
         }
     }
 
     @EventHandler
-    public void onInvClick(InventoryClickEvent e){
-        Bukkit.getScheduler().scheduleSyncDelayedTask(bingo, new Runnable() {
+    public void onInvClick(InventoryClickEvent e) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
             @Override
             public void run() {
                 SideList.updateScoreboard();
@@ -88,7 +105,7 @@ public class BingoEventhandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDisconnect(PlayerQuitEvent e){
+    public void onPlayerDisconnect(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         SideList.removePlayer(player);
     }

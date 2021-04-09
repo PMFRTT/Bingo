@@ -29,6 +29,7 @@ public final class BingoPlugin extends JavaPlugin {
     private static Timer timer;
 
     public static int items = 0;
+    public static int bannableItems = 0;
     public static SideList sideList;
     public static boolean scatter;
     public static boolean tpEnabled = false;
@@ -38,6 +39,7 @@ public final class BingoPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        bingo.Utils utils = new bingo.Utils(this);
         CoreMain.setPlugin(this);
         timer = new Timer(this, TimerType.INCREASING, "Das Bingo läuft seit: &b", "&cDas Bingo ist pausiert", false);
         BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
@@ -90,10 +92,15 @@ public final class BingoPlugin extends JavaPlugin {
         SettingCycle teleportTime = (SettingCycle) bingoSettings.teleporterSubSettings.getSettingbyName("Countdown-Zeit");
         SettingCycle teleportRange = (SettingCycle) bingoSettings.teleporterSubSettings.getSettingbyName("Teleporter-Radius");
         SettingSwitch enabletp = (SettingSwitch) bingoSettings.getSettingbyName("Teleporter");
+        SettingSwitch banning = (SettingSwitch) bingoSettings.getSettingbyName("Items Bannen");
+        SettingCycle banningItems = (SettingCycle) bingoSettings.banningSettings.getSettingbyName("Anzahl der Items");
         this.difficulty = difficulty.getValue();
         tpEnabled = enabletp.getSettingValue();
         BingoPlugin.scatter = scatter.getSettingValue();
         boolean singleplayer = singlePlayer.getSettingValue();
+        if(banning.getSettingValue()){
+            bannableItems = banningItems.getValue();
+        }
         if (keepInventory.getSettingValue()) {
             Utils.changeGamerule(GameRule.KEEP_INVENTORY, true);
         }

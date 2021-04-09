@@ -41,7 +41,7 @@ public class BingoCommandExecutor implements CommandExecutor {
                     assert player != null;
                     BingoInventory.updateInventory(player);
                     player.openInventory(BingoInventory.getPlayerInventory(player));
-                }else{
+                } else {
                     assert player != null;
                     player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Das Bingo hat noch &cnicht begonnen&f!"));
                 }
@@ -54,12 +54,14 @@ public class BingoCommandExecutor implements CommandExecutor {
                         player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du kannst die &cEinstellungen nicht mehr ändern&f, wenn das Bingo gestartet wurde!"));
                     }
                 } else if (args[0].equalsIgnoreCase("start")) {
-                    main.startBingo();
+                    if (BingoPlugin.getTimer().isPaused()) {
+                        main.startBingo();
+                    }
                 } else if (args[0].equalsIgnoreCase("clear")) {
                     BingoPlugin.getTimer().pause();
                     BingoList.getBingoList().clear();
                     BingoList.playerBingoLists.clear();
-                }else if(args[0].equalsIgnoreCase("respawn")){
+                } else if (args[0].equalsIgnoreCase("respawn")) {
                     Respawner.respawn(player);
                 }
             }
