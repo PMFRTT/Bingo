@@ -77,9 +77,9 @@ public class BingoEventhandler implements Listener {
                             }else{
                                 player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Dieses Item hast du bereits &cgebannt&f!"));
                             }
+                            SideList.updateScoreboard();
+                            e.setCancelled(true);
                         }
-                        SideList.updateScoreboard();
-                        e.setCancelled(true);
                     }
                 }
             }

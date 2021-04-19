@@ -1,7 +1,9 @@
 package bingo;
 
+import bingo.hotbar.BingoHotbarManager;
 import core.debug.DebugSender;
 import core.debug.DebugType;
+import core.hotbar.HotbarScheduler;
 import core.scoreboard.Score;
 import core.scoreboard.Scoreboard;
 import core.scoreboard.ScoreboardDisplay;

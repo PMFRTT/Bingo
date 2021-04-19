@@ -29,9 +29,9 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.16-R0.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.27" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: com.github.PMFRTT:Core:16.5.1.1">
+      <library name="Maven: com.github.PMFRTT:Core:16.5.32-dev">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../Core/target/Core.jar!/" />
+          <root url="jar://$MODULE_DIR$/../Core/target/Core-16.5.32-dev.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

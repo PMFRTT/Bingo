@@ -5,6 +5,7 @@ import bingo.commandExecutor.ResetCommandExecutor;
 import bingo.commandExecutor.TopCommandExecutor;
 import bingo.eventhandler.BingoEventhandler;
 import bingo.eventhandler.CheckInventory;
+import bingo.hotbar.BingoHotbarManager;
 import bingo.teleporter.Respawner;
 import bingo.teleporter.Teleporter;
 import core.core.CoreMain;
@@ -25,6 +26,8 @@ import java.util.*;
 public final class BingoPlugin extends JavaPlugin {
 
     private static BingoSettings bingoSettings;
+    private static BingoHotbarManager bingoHotbarManager;
+
     private static int difficulty = 0;
     private static Timer timer;
 
@@ -46,11 +49,13 @@ public final class BingoPlugin extends JavaPlugin {
         BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
         bingoEventhandler.initialize();
         bingoSettings = new BingoSettings(this);
+        bingoHotbarManager = new BingoHotbarManager(this);
         BingoCommandExecutor bingoCommandExecutor = new BingoCommandExecutor(this);
         TopCommandExecutor topCommandExecutor = new TopCommandExecutor();
         ResetCommandExecutor resetCommandExecutor = new ResetCommandExecutor(this);
         sideList = new SideList(this);
         respawner = new Respawner(this);
+        bingoHotbarManager.init();
 
         Objects.requireNonNull(getCommand("Bingo")).setExecutor(bingoCommandExecutor);
         Objects.requireNonNull(getCommand("Top")).setExecutor(topCommandExecutor);
