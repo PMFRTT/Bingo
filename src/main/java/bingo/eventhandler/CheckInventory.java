@@ -37,7 +37,7 @@ public class CheckInventory {
                     if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
                         lockSlot(player, i + 9);
                         BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
-                        inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType()));
+                        inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType(), player));
                         BingoInventory.updateInventory(player);
                         SideList.updateScoreboard();
                     }

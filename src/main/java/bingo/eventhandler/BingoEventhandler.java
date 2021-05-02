@@ -1,10 +1,6 @@
 package bingo.eventhandler;
 
-import bingo.BingoInventory;
-import bingo.BingoList;
-import bingo.BingoPlugin;
-import bingo.SideList;
-import com.sun.tools.javac.comp.Check;
+import bingo.*;
 import core.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -68,11 +64,12 @@ public class BingoEventhandler implements Listener {
             } else {
                 if (CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot()) || !CheckInventory.playerBans.get(player.getDisplayName()).contains(e.getSlot())) {
                     if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
+                        if(CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot())){
+                            e.setCancelled(true);
+                        }
                         if (BingoInventory.bannedItem.get(player.getDisplayName()).size() < BingoPlugin.bannableItems) {
                             if (!e.getCurrentItem().getType().equals(Material.BARRIER)) {
-                                CheckInventory.playerBans.get(player.getDisplayName()).add(e.getSlot());
-                                BingoInventory.bannedItem.get(player.getDisplayName()).add(e.getCurrentItem().getType());
-                                BingoList.addMaterialToCollected((Player) e.getWhoClicked(), e.getCurrentItem().getType());
+                                Banner.banItem((Player)e.getWhoClicked(), e.getCurrentItem().getType());
                                 player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du hast &c" + bingo.Utils.formatMaterialName(e.getCurrentItem().getType()) + " &ferfolgreich &cgebannt&f!"));
                             }else{
                                 player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Dieses Item hast du bereits &cgebannt&f!"));

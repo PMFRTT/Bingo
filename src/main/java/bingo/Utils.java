@@ -1,8 +1,10 @@
 package bingo;
 
 import bingo.eventhandler.CheckInventory;
+import bingo.summarizer.SummarizerCore;
 import core.debug.DebugSender;
 import core.debug.DebugType;
+import core.settings.Setting.Setting;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -10,8 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Random;
 
@@ -49,29 +49,13 @@ public class Utils {
 
     public static void preparePlayers(int scatterSize) {
         clearPlayers();
+        SummarizerCore.init();
         CheckInventory.createLock();
         if (BingoPlugin.banningEnabled) {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.openInventory(BingoInventory.getPlayerInventory(player));
             }
-            BukkitTask runnable = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    boolean done = true;
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (BingoInventory.bannedItem.get(player.getDisplayName()).size() != BingoPlugin.bannableItems) {
-                            done = false;
-                        }
-                    }
-                    if (done) {
-                        if (BingoPlugin.scatter) {
-                            for (Player player : Bukkit.getOnlinePlayers())
-                                scatterPlayer(player, scatterSize, true);
-                        }
-                        cancel();
-                    }
-                }
-            }.runTaskTimer(main, 0, 1L);
+            Banner.startBanning(scatterSize);
         } else {
             if (BingoPlugin.scatter) {
                 for (Player player : Bukkit.getOnlinePlayers())
@@ -97,5 +81,20 @@ public class Utils {
         return WordUtils.capitalize(tmp2);
     }
 
+    public void getSettings(){
+        BingoSettings bingoSettings = new BingoSettings(main);
+        Setting difficulty = bingoSettings.getSettingbyName("Schwierigkeit");
+        Setting items = bingoSettings.getSettingbyName("Items");
+        Setting keepInventory = bingoSettings.getSettingbyName("Keep Inventory");
+        Setting singlePlayer = bingoSettings.getSettingbyName("Singleplayer");
+        Setting scatter = bingoSettings.getSettingbyName("Scatter Players");
+        Setting singlePlayerStartTime = bingoSettings.singlePlayerSubSettings.getSettingbyName("Start-Zeit");
+        Setting scatterPlayerSize = bingoSettings.scatterPlayerSubSettings.getSettingbyName("Scatter-Größe");
+        Setting teleportTime = bingoSettings.teleporterSubSettings.getSettingbyName("Countdown-Zeit");
+        Setting teleportRange = bingoSettings.teleporterSubSettings.getSettingbyName("Teleporter-Radius");
+        Setting enabletp = bingoSettings.getSettingbyName("Teleporter");
+        Setting banning = bingoSettings.getSettingbyName("Items Bannen");
+        Setting banningItems = bingoSettings.banningSettings.getSettingbyName("Anzahl der Items");
+    }
 
 }

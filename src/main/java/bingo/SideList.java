@@ -1,9 +1,8 @@
 package bingo;
 
-import bingo.hotbar.BingoHotbarManager;
+import bingo.summarizer.SummarizerCore;
 import core.debug.DebugSender;
 import core.debug.DebugType;
-import core.hotbar.HotbarScheduler;
 import core.scoreboard.Score;
 import core.scoreboard.Scoreboard;
 import core.scoreboard.ScoreboardDisplay;
@@ -61,14 +60,17 @@ public class SideList {
             for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
                 if (BingoList.playerCollectedList.get(name).contains(material)) {
                     removeScore(player, material);
+                    Objects.requireNonNull(SummarizerCore.getSummarization(player)).lockedItem(material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&a" + Utils.formatMaterialName(material)), -1));
                 } else if (player.getInventory().contains(material)) {
                     removeScore(player, material);
+                    Objects.requireNonNull(SummarizerCore.getSummarization(player)).collectedItem(material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&b" + Utils.formatMaterialName(material)), 0));
                 } else {
                     removeScore(player, material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1));
                 }
+                BingoInventory.updateInventory(player);
             }
             int i = 0;
             for (Score score : scoreboard.getScores()) {
