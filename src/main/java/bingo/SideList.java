@@ -1,5 +1,8 @@
 package bingo;
 
+import bingo.main.BingoInventory;
+import bingo.main.BingoList;
+import bingo.main.BingoPlugin;
 import bingo.summarizer.SummarizerCore;
 import core.debug.DebugSender;
 import core.debug.DebugType;
@@ -21,8 +24,8 @@ import java.util.Objects;
 public class SideList {
 
     Plugin plugin;
-    private static HashMap<String, Scoreboard> playerScoreboards = new HashMap<String, Scoreboard>();
-    private static HashMap<String, ScoreboardDisplay> playerScoreboardsDisplay = new HashMap<String, ScoreboardDisplay>();
+    private static final HashMap<String, Scoreboard> playerScoreboards = new HashMap<String, Scoreboard>();
+    private static final HashMap<String, ScoreboardDisplay> playerScoreboardsDisplay = new HashMap<String, ScoreboardDisplay>();
 
     public SideList(Plugin plugin) {
         this.plugin = plugin;
@@ -44,6 +47,9 @@ public class SideList {
                 ScoreboardDisplay scoreboardDisplay = new ScoreboardDisplay(this.plugin, player);
                 playerScoreboards.put(core.Utils.getDisplayName(player), scoreboard);
                 playerScoreboardsDisplay.put(core.Utils.getDisplayName(player), scoreboardDisplay);
+            } else {
+                playerScoreboards.remove(player.getDisplayName());
+                createPlayerScoreBoards();
             }
         }
         updateScoreboard();
@@ -78,7 +84,7 @@ public class SideList {
                     i++;
                 }
             }
-            if (i != BingoPlugin.items) {
+            if (i != core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")) {
                 startRender(player);
             }
         }

@@ -1,7 +1,7 @@
 package bingo.eventhandler;
 
-import bingo.BingoInventory;
-import bingo.BingoList;
+import bingo.main.BingoInventory;
+import bingo.main.BingoList;
 import bingo.SideList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

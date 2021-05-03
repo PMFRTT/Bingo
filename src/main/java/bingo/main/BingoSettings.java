@@ -1,4 +1,4 @@
-package bingo;
+package bingo.main;
 
 import core.settings.PluginSettings;
 import core.settings.SubSettings;
@@ -10,11 +10,12 @@ import java.util.ArrayList;
 
 public class BingoSettings extends PluginSettings {
 
-    Plugin plugin;
-    SubSettings singlePlayerSubSettings;
-    SubSettings scatterPlayerSubSettings;
-    SubSettings teleporterSubSettings;
-    SubSettings banningSettings;
+    private final Plugin plugin;
+
+    public SubSettings singlePlayerSubSettings;
+    public SubSettings scatterPlayerSubSettings;
+    public SubSettings teleporterSubSettings;
+    public SubSettings banningSettings;
 
     public BingoSettings(Plugin plugin) {
         super(plugin.getName() + "-Einstellungen", plugin);
@@ -65,12 +66,6 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7Legt fest, ob Spieler nach dem Tod"));
             add(Utils.colorize("&7ihre Items &cverlieren &7oder &abehalten"));
         }}, Material.ENDER_EYE, false);
-
-        /*this.addSetting("Announce Advancements", new ArrayList<String>() {{
-            add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
-            add(Utils.colorize("&7Chat erfahren, dass ein"));
-            add(Utils.colorize("&6Advancement erreicht &7wurde"));
-        }}, Material.NOTE_BLOCK, false);*/
 
         this.addSetting("Scatter Players", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Spieler"));

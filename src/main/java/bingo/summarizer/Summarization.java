@@ -1,6 +1,6 @@
 package bingo.summarizer;
 
-import bingo.BingoPlugin;
+import bingo.main.BingoPlugin;
 import bingo.Utils;
 import core.debug.DebugSender;
 import core.debug.DebugType;

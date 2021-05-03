@@ -1,6 +1,6 @@
 package bingo.commandExecutor;
 
-import bingo.BingoPlugin;
+import bingo.main.BingoPlugin;
 import core.core.CoreResetServer;
 import core.debug.DebugSender;
 import core.debug.DebugType;

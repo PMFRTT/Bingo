@@ -1,6 +1,6 @@
 package bingo.teleporter;
 
-import bingo.BingoPlugin;
+import bingo.main.BingoPlugin;
 import core.Utils;
 import core.debug.DebugSender;
 import core.debug.DebugType;

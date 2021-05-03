@@ -1,7 +1,9 @@
 package bingo.eventhandler;
 
 import bingo.*;
-import core.Utils;
+import bingo.main.BingoInventory;
+import bingo.main.BingoList;
+import bingo.main.BingoPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,6 +15,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import core.Utils;
 
 public class BingoEventhandler implements Listener {
 
@@ -62,16 +65,16 @@ public class BingoEventhandler implements Listener {
                     e.setCancelled(true);
                 }
             } else {
-                if (CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot()) || !CheckInventory.playerBans.get(player.getDisplayName()).contains(e.getSlot())) {
+                if (CheckInventory.getLockedSize(Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")).contains(e.getSlot()) || !CheckInventory.playerBans.get(player.getDisplayName()).contains(e.getSlot())) {
                     if (e.getClickedInventory() != e.getWhoClicked().getInventory()) {
-                        if(CheckInventory.getLockedSize(BingoPlugin.items).contains(e.getSlot())){
+                        if (CheckInventory.getLockedSize(Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")).contains(e.getSlot())) {
                             e.setCancelled(true);
                         }
-                        if (BingoInventory.bannedItem.get(player.getDisplayName()).size() < BingoPlugin.bannableItems) {
+                        if (BingoInventory.bannedItem.get(player.getDisplayName()).size() < Utils.getSettingValueInt(BingoPlugin.getBingoSettings(),"Anzahl der Items")) {
                             if (!e.getCurrentItem().getType().equals(Material.BARRIER)) {
-                                Banner.banItem((Player)e.getWhoClicked(), e.getCurrentItem().getType());
+                                Banner.banItem((Player) e.getWhoClicked(), e.getCurrentItem().getType());
                                 player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du hast &c" + bingo.Utils.formatMaterialName(e.getCurrentItem().getType()) + " &ferfolgreich &cgebannt&f!"));
-                            }else{
+                            } else {
                                 player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Dieses Item hast du bereits &cgebannt&f!"));
                             }
                             SideList.updateScoreboard();
