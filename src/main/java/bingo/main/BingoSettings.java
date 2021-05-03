@@ -1,4 +1,4 @@
-package bingo;
+package bingo.main;
 
 import core.settings.PluginSettings;
 import core.settings.SubSettings;
@@ -10,11 +10,12 @@ import java.util.ArrayList;
 
 public class BingoSettings extends PluginSettings {
 
-    Plugin plugin;
-    SubSettings singlePlayerSubSettings;
-    SubSettings scatterPlayerSubSettings;
-    SubSettings teleporterSubSettings;
-    SubSettings banningSettings;
+    private final Plugin plugin;
+
+    public SubSettings singlePlayerSubSettings;
+    public SubSettings scatterPlayerSubSettings;
+    public SubSettings teleporterSubSettings;
+    public SubSettings banningSettings;
 
     public BingoSettings(Plugin plugin) {
         super(plugin.getName() + "-Einstellungen", plugin);
@@ -65,12 +66,6 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7Legt fest, ob Spieler nach dem Tod"));
             add(Utils.colorize("&7ihre Items &cverlieren &7oder &abehalten"));
         }}, Material.ENDER_EYE, false);
-
-        /*this.addSetting("Announce Advancements", new ArrayList<String>() {{
-            add(Utils.colorize("&7Legt fest, ob Gegenspieler im"));
-            add(Utils.colorize("&7Chat erfahren, dass ein"));
-            add(Utils.colorize("&6Advancement erreicht &7wurde"));
-        }}, Material.NOTE_BLOCK, false);*/
 
         this.addSetting("Scatter Players", new ArrayList<String>() {{
             add(Utils.colorize("&7Legt fest, ob Spieler"));
@@ -223,6 +218,47 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&b7 &fItems"));
             add(Utils.colorize("&b8 &fItems"));
             add(Utils.colorize("&b9 &fItems"));
+        }});
+
+        banningSettings.addSetting("Automatisches Bannen", new ArrayList<String>(){{
+            add(Utils.colorize("&7Hier kannst du einstellen,"));
+            add(Utils.colorize("&7Ob Items &6automatisch gebannt"));
+            add(Utils.colorize("&7werden sollen, wenn der Spieler"));
+            add(Utils.colorize("&7zu lange braucht!"));
+        }}, Material.CLOCK, true);
+
+        banningSettings.addSetting("Erster Timeout", new ArrayList<String>(){{
+            add(Utils.colorize("&7Hier kannst du einstellen, wie lange"));
+            add(Utils.colorize("&7ein Spieler &6Zeit&7 hat, bis das erste"));
+            add(Utils.colorize("&7Item &6automatisch gebannt &7wird!"));
+        }}, Material.NAUTILUS_SHELL, new ArrayList<Integer>(){{
+            add(15);
+            add(20);
+            add(25);
+            add(30);
+            add(45);
+            add(60);
+        }}, new ArrayList<String>(){{
+            add(Utils.colorize("&b15&f Sekunden"));
+            add(Utils.colorize("&b20&f Sekunden"));
+            add(Utils.colorize("&b25&f Sekunden"));
+            add(Utils.colorize("&b30&f Sekunden"));
+            add(Utils.colorize("&b45&f Sekunden"));
+            add(Utils.colorize("&b60&f Sekunden"));
+        }});
+
+        banningSettings.addSetting("Bann Abstand", new ArrayList<String>(){{
+            add(Utils.colorize("&7Hier kannst du einstellen, wie lange"));
+            add(Utils.colorize("&7ein Spieler zwischen dem Item bannen &6Zeit"));
+            add(Utils.colorize("&7hat, bevor das nächste &6automatisch gebannt&7 wird"));
+        }}, Material.NAUTILUS_SHELL, new ArrayList<Integer>(){{
+            add(5);
+            add(10);
+            add(15);
+        }}, new ArrayList<String>(){{
+            add(Utils.colorize("&b5&f Sekunden"));
+            add(Utils.colorize("&b10&f Sekunden"));
+            add(Utils.colorize("&b15&f Sekunden"));
         }});
 
     }

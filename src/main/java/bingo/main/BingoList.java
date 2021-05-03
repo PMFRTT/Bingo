@@ -1,14 +1,12 @@
-package bingo;
+package bingo.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 public class BingoList {
 
@@ -24,7 +22,7 @@ public class BingoList {
             Material.STONE_BRICKS, Material.RED_WOOL, Material.STONE_HOE, Material.LEATHER_BOOTS, Material.GLASS_BOTTLE,
             Material.TRIPWIRE_HOOK, Material.ARROW, Material.IRON_AXE, Material.BUCKET, Material.BOWL, Material.SHIELD,
             Material.DANDELION, Material.CRAFTING_TABLE, Material.FURNACE, Material.BLACK_DYE, Material.BOW,
-            Material.ITEM_FRAME, Material.TALL_GRASS, Material.BOOK, Material.RAIL
+            Material.ITEM_FRAME, Material.BOOK, Material.RAIL
     };
 
     public static Material[] mediumMaterials = {Material.LAPIS_BLOCK, Material.GOLD_BLOCK, Material.DIAMOND,
@@ -82,7 +80,7 @@ public class BingoList {
         BingoList.generateBingoList(difficulty, size);
         for (Player player : Bukkit.getOnlinePlayers()) {
             assert getBingoList() != null;
-            ArrayList<Material> bingoList = new ArrayList<Material>(getBingoList());
+            ArrayList<Material> bingoList = getBingoList();
             playerBingoLists.put(player.getDisplayName(), bingoList);
             createCollectionLists(player);
             BingoInventory.createInventory(player, size);

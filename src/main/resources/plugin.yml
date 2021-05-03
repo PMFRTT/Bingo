@@ -1,6 +1,6 @@
 name: Bingo
 version: ${project.version}
-main: bingo.BingoPlugin
+main: bingo.main.BingoPlugin
 api-version: 1.13
 commands:
   Bingo:

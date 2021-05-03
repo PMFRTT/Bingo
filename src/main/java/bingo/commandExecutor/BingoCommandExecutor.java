@@ -1,11 +1,10 @@
 package bingo.commandExecutor;
 
-import bingo.BingoInventory;
-import bingo.BingoList;
-import bingo.BingoPlugin;
+import bingo.main.BingoInventory;
+import bingo.main.BingoList;
+import bingo.main.BingoPlugin;
 import bingo.teleporter.Respawner;
 import bingo.teleporter.Teleporter;
-import bingo.teleporter.TeleporterTimer;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,25 +48,27 @@ public class BingoCommandExecutor implements CommandExecutor {
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("settings")) {
                     if (BingoPlugin.getTimer().isPaused() || player.isOp()) {
-                        player.openInventory(main.getBingoSettings().getSettingsInventory().getInventory());
+                        player.openInventory(BingoPlugin.getBingoSettings().getSettingsInventory().getInventory());
                     } else {
                         player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Du kannst die &cEinstellungen nicht mehr ändern&f, wenn das Bingo gestartet wurde!"));
                     }
                 } else if (args[0].equalsIgnoreCase("start")) {
                     if (BingoPlugin.getTimer().isPaused()) {
-                        main.startBingo();
+                        bingo.Utils.startBingo();
                     }
                 } else if (args[0].equalsIgnoreCase("clear")) {
                     BingoPlugin.getTimer().pause();
+                    assert BingoList.getBingoList() != null;
                     BingoList.getBingoList().clear();
                     BingoList.playerBingoLists.clear();
                 } else if (args[0].equalsIgnoreCase("respawn")) {
+                    assert player != null;
                     Respawner.respawn(player);
                 }
             }
         } else if (command.getLabel().equalsIgnoreCase("rtp")) {
             assert player != null;
-            if (BingoPlugin.tpEnabled) {
+            if (core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Teleporter")) {
                 if (Teleporter.canTP(player)) {
                     Teleporter.teleport(player);
                     player.sendMessage(Utils.getPrefix("Teleporter") + Utils.colorize("Du wurdest &ateleportiert&f!"));

@@ -1,9 +1,11 @@
 package bingo;
 
-import bingo.hotbar.BingoHotbarManager;
+import bingo.main.BingoInventory;
+import bingo.main.BingoList;
+import bingo.main.BingoPlugin;
+import bingo.summarizer.SummarizerCore;
 import core.debug.DebugSender;
 import core.debug.DebugType;
-import core.hotbar.HotbarScheduler;
 import core.scoreboard.Score;
 import core.scoreboard.Scoreboard;
 import core.scoreboard.ScoreboardDisplay;
@@ -22,8 +24,8 @@ import java.util.Objects;
 public class SideList {
 
     Plugin plugin;
-    private static HashMap<String, Scoreboard> playerScoreboards = new HashMap<String, Scoreboard>();
-    private static HashMap<String, ScoreboardDisplay> playerScoreboardsDisplay = new HashMap<String, ScoreboardDisplay>();
+    private static final HashMap<String, Scoreboard> playerScoreboards = new HashMap<String, Scoreboard>();
+    private static final HashMap<String, ScoreboardDisplay> playerScoreboardsDisplay = new HashMap<String, ScoreboardDisplay>();
 
     public SideList(Plugin plugin) {
         this.plugin = plugin;
@@ -45,6 +47,9 @@ public class SideList {
                 ScoreboardDisplay scoreboardDisplay = new ScoreboardDisplay(this.plugin, player);
                 playerScoreboards.put(core.Utils.getDisplayName(player), scoreboard);
                 playerScoreboardsDisplay.put(core.Utils.getDisplayName(player), scoreboardDisplay);
+            } else {
+                playerScoreboards.remove(player.getDisplayName());
+                createPlayerScoreBoards();
             }
         }
         updateScoreboard();
@@ -61,14 +66,17 @@ public class SideList {
             for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
                 if (BingoList.playerCollectedList.get(name).contains(material)) {
                     removeScore(player, material);
+                    Objects.requireNonNull(SummarizerCore.getSummarization(player)).lockedItem(material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&a" + Utils.formatMaterialName(material)), -1));
                 } else if (player.getInventory().contains(material)) {
                     removeScore(player, material);
+                    Objects.requireNonNull(SummarizerCore.getSummarization(player)).collectedItem(material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&b" + Utils.formatMaterialName(material)), 0));
                 } else {
                     removeScore(player, material);
                     scoreboard.addScore(new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1));
                 }
+                BingoInventory.updateInventory(player);
             }
             int i = 0;
             for (Score score : scoreboard.getScores()) {
@@ -76,7 +84,7 @@ public class SideList {
                     i++;
                 }
             }
-            if (i != BingoPlugin.items) {
+            if (i != core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")) {
                 startRender(player);
             }
         }

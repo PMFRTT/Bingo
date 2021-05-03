@@ -1,12 +1,12 @@
-package bingo;
+package bingo.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import bingo.summarizer.SummarizerCore;
 import core.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -19,8 +19,6 @@ public class BingoInventory {
 
     private static final HashMap<String, Inventory> playerInventoryHashMap = new HashMap<String, Inventory>();
     public static final HashMap<String, List<Material>> bannedItem = new HashMap<>();
-
-    public static HashMap<String, Boolean> doneBanning = new HashMap<String, Boolean>();
 
     public static void createInventory(Player player, int size) {
         bannedItem.put(player.getDisplayName(), new ArrayList<Material>());
@@ -67,7 +65,7 @@ public class BingoInventory {
         }
     }
 
-    public static ItemStack convertToLocked(Material material) {
+    public static ItemStack convertToLocked(Material material, Player player) {
         ItemStack itemStack = new ItemStack(material, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         assert itemMeta != null;
@@ -80,7 +78,8 @@ public class BingoInventory {
             add(Utils.colorize("&fbereits &agefunden"));
             add(Utils.colorize("&fDas Item bleibt in"));
             add(Utils.colorize("&fdiesem Slot &cgesperrt!"));
-            add(Utils.colorize("&7Shiftclick um das Item zu erhalten!"));
+            add(Utils.colorize("&fDu hast das Item nach &b" + Utils.formatTimerTimeTicksTwoDecimal(SummarizerCore.getSummarization(player).getFirstFoundTicks(material)) + "&f gefunden!"));
+            add(Utils.colorize("&8Shiftclick um das Item zu erhalten!"));
         }};
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);

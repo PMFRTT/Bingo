@@ -1,7 +1,7 @@
 package bingo.eventhandler;
 
-import bingo.BingoInventory;
-import bingo.BingoList;
+import bingo.main.BingoInventory;
+import bingo.main.BingoList;
 import bingo.SideList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ public class CheckInventory {
                     if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
                         lockSlot(player, i + 9);
                         BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
-                        inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType()));
+                        inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType(), player));
                         BingoInventory.updateInventory(player);
                         SideList.updateScoreboard();
                     }
