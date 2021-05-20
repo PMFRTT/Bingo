@@ -9,6 +9,7 @@ import bingo.teleporter.Teleporter;
 import core.core.CoreMain;
 import core.debug.DebugSender;
 import core.debug.DebugType;
+import core.hotbar.HotbarScheduler;
 import core.timer.Timer;
 import core.timer.TimerType;
 import org.apache.commons.lang.WordUtils;
@@ -16,6 +17,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.graalvm.compiler.core.common.util.Util;
 
 import java.util.Random;
 
@@ -28,15 +30,19 @@ public class Utils {
     }
 
     public void init() {
+        core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, false);
         Banner banner = new Banner(main);
         BingoPlugin.setTimer(new Timer(main, TimerType.INCREASING, "Das Bingo läuft seit: &b", "&cDas Bingo ist pausiert", false));
         for (Player player : Bukkit.getOnlinePlayers()) {
-            CoreMain.hotbarManager.getHotbarScheduler(player).setTimer(BingoPlugin.getTimer());
-            CoreMain.hotbarManager.getHotbarScheduler(player).startScheduler(false);
+
+            HotbarScheduler hotbarScheduler = CoreMain.hotbarManager.getHotbarScheduler(player);
+
+            hotbarScheduler.setTimer(BingoPlugin.getTimer());
+            hotbarScheduler.startScheduler(false);
         }
     }
 
-    private static void startCompletedChecker(){
+    private static void startCompletedChecker() {
         BukkitScheduler scheduler = main.getServer().getScheduler();
 
         scheduler.scheduleSyncRepeatingTask(main, new Runnable() {
@@ -47,7 +53,7 @@ public class Utils {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         if (!BingoList.completed(player)) {
                             BingoInventory.updateInventory(player);
-                            CheckInventory.checkInventory(player,core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items"));
+                            CheckInventory.checkInventory(player, core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items"));
                         } else {
                             BingoPlugin.getTimer().pause();
                             core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(player) + " &fhat das Bingo in &a" + core.Utils.formatTimerTimeTicksThreeDecimal(BingoPlugin.getTimer().getTicks()) + "&f beendet!"));
@@ -142,7 +148,19 @@ public class Utils {
             teleporter.init();
         }
         startCompletedChecker();
-        BingoPlugin.getTimer().resume();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+
+            HotbarScheduler hotbarScheduler = CoreMain.hotbarManager.getHotbarScheduler(player);
+            hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Verwende &c/bingo respawn&f um an dem Ort deines Todes zu spawnen!"), 24000, 250, 4800);
+            hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Mit &6/top&f kannst du aus einer Höhle an die Oberfläche kommen!"), 24000, 250, 9600);
+            hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Du brauchst eine Pause? Verwende &a/bingo pause&f um das Bingo zu pausieren!"), 24000, 250, 14400);
+            hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Du möchtest verreisen? Mit &5/rtp&f kannst du dich alle " + (core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings().teleporterSubSettings, "Countdown-Zeit")) / 60) + " Minuten teleportieren!", 24000, 250, 19200);
+            hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Verlierst du den Überblick? Verwende &e/bingo&f um eine Übersicht über dein Bingo zu erhalten!"), 24000, 250, 24000);
+
+        }
+        BingoPlugin.getTimer().
+
+                resume();
     }
 
 }

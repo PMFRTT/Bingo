@@ -39,14 +39,12 @@ public class CheckInventory {
                         BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
                         inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType(), player));
                         BingoInventory.updateInventory(player);
-                        SideList.updateScoreboard();
                     }
                 } else {
                     if (BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
                         BingoList.removeMaterialFromCollected(player, Objects.requireNonNull(inventory.getItem(i).getType()));
                         BingoInventory.updateInventory(player);
                         unlockSlot(player, i + 9);
-                        SideList.updateScoreboard();
                     }
                 }
             }

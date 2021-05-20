@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import bingo.SideList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -45,7 +46,10 @@ public class BingoList {
             Material.EMERALD_BLOCK, Material.LIME_BED, Material.MAGMA_BLOCK, Material.SEA_LANTERN, Material.JACK_O_LANTERN,
             Material.GLOWSTONE, Material.QUARTZ_BLOCK, Material.ACACIA_LOG, Material.NETHERITE_INGOT, Material.RABBIT_STEW,
             Material.LEAD, Material.GLISTERING_MELON_SLICE, Material.COAL_ORE, Material.BROWN_STAINED_GLASS, Material.ENDER_CHEST,
-            Material.STICKY_PISTON, Material.ACTIVATOR_RAIL, Material.SLIME_BLOCK
+            Material.STICKY_PISTON, Material.ACTIVATOR_RAIL, Material.SLIME_BLOCK, Material.JUKEBOX, Material.BAMBOO,
+            Material.WEEPING_VINES, Material.TWISTING_VINES, Material.WARPED_ROOTS, Material.CRIMSON_ROOTS, Material.SADDLE,
+            Material.DIAMOND_HORSE_ARMOR, Material.HONEY_BOTTLE, Material.POISONOUS_POTATO, Material.NETHERITE_HELMET,
+            Material.NAME_TAG, Material.LEAD, Material.CROSSBOW, Material.FERMENTED_SPIDER_EYE
 
     };
 
@@ -94,8 +98,12 @@ public class BingoList {
     }
 
     public static void addMaterialToCollected(Player player, Material material) {
-        if (!playerCollectedList.get(player.getDisplayName()).contains(material)) {
-            playerCollectedList.get(player.getDisplayName()).add(material);
+        if (material != Material.BARRIER) {
+            if (!playerCollectedList.get(player.getDisplayName()).contains(material)) {
+                playerCollectedList.get(player.getDisplayName()).add(material);
+                System.out.println("Locking " + material.name());
+                SideList.updateScoreboard();
+            }
         }
     }
 

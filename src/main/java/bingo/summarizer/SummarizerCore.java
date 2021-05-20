@@ -3,26 +3,20 @@ package bingo.summarizer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class SummarizerCore {
 
-    private static List<Summarization> summarizations = new ArrayList<Summarization>();
+    private static HashMap<String, Summarization> summarizationOffline = new HashMap<String, Summarization>();
 
     public static void init() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            summarizations.add(new Summarization(player));
+            summarizationOffline.put(player.getDisplayName(), new Summarization(player));
         }
     }
 
     public static Summarization getSummarization(Player player) {
-        for (Summarization summarization : summarizations) {
-            if (summarization.getOwner() == player) {
-                return summarization;
-            }
-        }
-        return null;
+        return summarizationOffline.get(player.getDisplayName());
     }
 
 }

@@ -2,6 +2,7 @@ package bingo.main;
 
 import bingo.SideList;
 import bingo.commandExecutor.BingoCommandExecutor;
+import bingo.commandExecutor.BingoTabCompleter;
 import bingo.commandExecutor.ResetCommandExecutor;
 import bingo.commandExecutor.TopCommandExecutor;
 import bingo.eventhandler.BingoEventhandler;
@@ -23,6 +24,9 @@ public final class BingoPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        bingoSettings = new BingoSettings(this);
+
         bingo.Utils utils = new bingo.Utils(this);
         utils.init();
 
@@ -30,8 +34,6 @@ public final class BingoPlugin extends JavaPlugin {
 
         BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
         bingoEventhandler.initialize();
-
-        bingoSettings = new BingoSettings(this);
 
         sideList = new SideList(this);
         respawner = new Respawner(this);
@@ -41,6 +43,7 @@ public final class BingoPlugin extends JavaPlugin {
         ResetCommandExecutor resetCommandExecutor = new ResetCommandExecutor(this);
 
         Objects.requireNonNull(getCommand("Bingo")).setExecutor(bingoCommandExecutor);
+        Objects.requireNonNull(getCommand("bingo")).setTabCompleter(new BingoTabCompleter());
         Objects.requireNonNull(getCommand("Top")).setExecutor(topCommandExecutor);
         Objects.requireNonNull(getCommand("reset")).setExecutor(resetCommandExecutor);
         Objects.requireNonNull(getCommand("rtp")).setExecutor(bingoCommandExecutor);

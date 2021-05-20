@@ -48,7 +48,8 @@ public class Banner {
                         Timer timer = playerTimers.get(player.getDisplayName());
                         Random random = new Random();
                         if (timer.getSeconds() == ((Integer) BingoPlugin.getBingoSettings().banningSettings.getSettingbyName("Erster Timeout").getValue() + playerIndexTimers.get(player.getDisplayName()) * (Integer) BingoPlugin.getBingoSettings().banningSettings.getSettingbyName("Bann Abstand").getValue()) && BingoInventory.bannedItem.get(player.getDisplayName()).size() < core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings().banningSettings, "Anzahl der Items")) {
-                            while (!banItem(player, BingoList.getBingoList().get(random.nextInt(BingoList.getBingoList().size()))));
+                            while (!banItem(player, BingoList.getBingoList().get(random.nextInt(BingoList.getBingoList().size()))))
+                                ;
                         }
                     }
                 }
@@ -67,15 +68,12 @@ public class Banner {
 
     public static boolean banItem(Player player, Material material) {
         if (BingoInventory.bannedItem.get(player.getDisplayName()).size() < core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings().banningSettings, "Anzahl der Items")) {
-            if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(material)) {
-                assert BingoList.getBingoList() != null;
-                CheckInventory.playerBans.get(player.getDisplayName()).add(BingoList.getBingoList().indexOf(material));
-                BingoInventory.bannedItem.get(player.getDisplayName()).add(material);
-                BingoList.addMaterialToCollected(player, material);
-                SideList.updateScoreboard();
-                playerIndexTimers.put(player.getDisplayName(), playerIndexTimers.get(player.getDisplayName()) + 1);
-                return true;
-            }
+            assert BingoList.getBingoList() != null;
+            CheckInventory.playerBans.get(player.getDisplayName()).add(BingoList.getBingoList().indexOf(material));
+            BingoInventory.bannedItem.get(player.getDisplayName()).add(material);
+            BingoList.addMaterialToCollected(player, material);
+            playerIndexTimers.put(player.getDisplayName(), playerIndexTimers.get(player.getDisplayName()) + 1);
+            return true;
         }
         return false;
     }

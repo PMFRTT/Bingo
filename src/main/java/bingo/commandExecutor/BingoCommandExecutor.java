@@ -64,6 +64,21 @@ public class BingoCommandExecutor implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("respawn")) {
                     assert player != null;
                     Respawner.respawn(player);
+                } else if (args[0].equalsIgnoreCase("pause")) {
+                    if (!BingoPlugin.getTimer().isPaused()) {
+                        BingoPlugin.getTimer().pause();
+                        for(Player player1 : Bukkit.getOnlinePlayers()){
+                            core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&cPause!"), Utils.colorize("Das Bingo wurde &cpausiert&f!"));
+                        }
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("resume")) {
+                    if (BingoPlugin.getTimer().isPaused()) {
+                        BingoPlugin.getTimer().resume();
+                        for(Player player1 : Bukkit.getOnlinePlayers()){
+                            core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&aWeiter!"), Utils.colorize("Das Bingo wurde &afortgesetzt&f!"));
+                        }
+                    }
                 }
             }
         } else if (command.getLabel().equalsIgnoreCase("rtp")) {
