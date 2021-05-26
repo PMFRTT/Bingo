@@ -21,11 +21,23 @@ public class Summarization {
     public void collectedItem(Material material) {
         if (this.itemTimeStamps.containsKey(material)) {
             if (!this.itemTimeStamps.get(material).containsKey("first_found")) {
-                this.itemTimeStamps.get(material).put("first_found", BingoPlugin.getTimer().getTicks());
+                this.itemTimeStamps.get(material).put("first_found", SummarizerCore.getTimer().getTicks());
                 DebugSender.sendDebug(DebugType.PLUGIN, "first_found: " + Utils.formatMaterialName(material) + " " + itemTimeStamps.get(material).get("first_found"));
             } else {
                 DebugSender.sendDebug(DebugType.PLUGIN, "last_found: " + Utils.formatMaterialName(material) + " " + itemTimeStamps.get(material).get("last_found"));
-                this.itemTimeStamps.get(material).put("last_found", BingoPlugin.getTimer().getTicks());
+                this.itemTimeStamps.get(material).put("last_found", SummarizerCore.getTimer().getTicks());
+            }
+        } else {
+            this.itemTimeStamps.put(material, new HashMap<String, Integer>());
+            collectedItem(material);
+        }
+    }
+
+    public void addSinglePlayerTime(Material material, Integer ticks) {
+        if (this.itemTimeStamps.containsKey(material)) {
+            if (!this.itemTimeStamps.get(material).containsKey("singleplayer_time")) {
+                this.itemTimeStamps.get(material).put("singleplayer_time", ticks);
+                DebugSender.sendDebug(DebugType.PLUGIN, "singleplayer_time: " + Utils.formatMaterialName(material) + " " + itemTimeStamps.get(material).get("singleplayer_time"));
             }
         } else {
             this.itemTimeStamps.put(material, new HashMap<String, Integer>());
@@ -36,11 +48,11 @@ public class Summarization {
     public void lockedItem(Material material) {
         if (this.itemTimeStamps.containsKey(material)) {
             if (!this.itemTimeStamps.get(material).containsKey("first_locked")) {
-                this.itemTimeStamps.get(material).put("first_locked", BingoPlugin.getTimer().getTicks());
+                this.itemTimeStamps.get(material).put("first_locked", SummarizerCore.getTimer().getTicks());
                 DebugSender.sendDebug(DebugType.PLUGIN, "first_locked: " + Utils.formatMaterialName(material) + " " + itemTimeStamps.get(material).get("first_locked"));
 
             } else {
-                this.itemTimeStamps.get(material).put("last_locked", BingoPlugin.getTimer().getTicks());
+                this.itemTimeStamps.get(material).put("last_locked", SummarizerCore.getTimer().getTicks());
                 DebugSender.sendDebug(DebugType.PLUGIN, "last_locked: " + Utils.formatMaterialName(material) + " " + itemTimeStamps.get(material).get("last_locked"));
 
             }
@@ -74,6 +86,13 @@ public class Summarization {
     public Integer getLastLockedTicks(Material material) {
         if (this.itemTimeStamps.containsKey(material)) {
             return this.itemTimeStamps.get(material).get("last_locked");
+        }
+        return 0;
+    }
+
+    public Integer getSingleplayerTimeTicks(Material material) {
+        if (this.itemTimeStamps.containsKey(material)) {
+            return this.itemTimeStamps.get(material).get("singleplayer_time");
         }
         return 0;
     }
