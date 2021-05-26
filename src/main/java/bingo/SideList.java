@@ -1,5 +1,6 @@
 package bingo;
 
+import bingo.eventhandler.CheckInventory;
 import bingo.main.BingoInventory;
 import bingo.main.BingoList;
 import bingo.main.BingoPlugin;
@@ -43,11 +44,12 @@ public class SideList {
             if (!playerScoreboards.containsKey(player.getDisplayName())) {
                 Scoreboard scoreboard = new Scoreboard(ScoreboardType.MULTI_TITLE, new ArrayList<String>() {{
                     add(core.Utils.colorize(core.Utils.getRainbowString("Bingo") + "&f - by PMFRTT"));
-                    add(core.Utils.colorize("Gefundene Items: &6" + BingoList.playerCollectedList.get(player.getDisplayName()).size() + "&7/&a" + core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")));
+                    add(core.Utils.colorize("Gefundene Items: &6" + BingoList.playerCollectedList.get(player.getDisplayName()).size() + "&7/&a" + BingoList.bingoList.size()));
                 }}, 0);
                 scoreboard.addScore(new Score("", 2));
                 ScoreboardDisplay scoreboardDisplay = new ScoreboardDisplay(plugin, player);
-                scoreboardDisplay.enableTitlesList(scoreboard, 100);
+                scoreboardDisplay.setScoreboard(scoreboard);
+                scoreboardDisplay.enableTitlesList(300);
                 playerScoreboards.put(core.Utils.getDisplayName(player), scoreboard);
                 playerScoreboardsDisplay.put(core.Utils.getDisplayName(player), scoreboardDisplay);
             } else {
@@ -59,46 +61,58 @@ public class SideList {
     }
 
     public static void updateScoreboard() {
-        for (String name : playerScoreboards.keySet()) {
-            Player player = Bukkit.getPlayer(name);
-            Scoreboard scoreboard = playerScoreboards.get(name);
-            List<String> scores = new ArrayList<String>();
-            for (Score score : scoreboard.getScores()) {
-                scores.add(score.getContent());
-            }
-            for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
-                if (BingoList.playerCollectedList.get(name).contains(material)) {
-                    removeScore(player, material);
-                    Objects.requireNonNull(SummarizerCore.getSummarization(player)).lockedItem(material);
-                    Score score = new Score(core.Utils.colorize("&a" + Utils.formatMaterialName(material)), -1);
-                    score.setSuffix("&7 gefunden!");
-                    scoreboard.addScore(score);
-                } else if (player.getInventory().contains(material)) {
-                    removeScore(player, material);
-                    Objects.requireNonNull(SummarizerCore.getSummarization(player)).collectedItem(material);
-                    Score score = new Score(core.Utils.colorize("&b" + Utils.formatMaterialName(material)), 0);
-                    score.setPrefix("&7Sperre ");
-                    score.setSuffix("&7!");
-                    scoreboard.addScore(score);
-                } else {
-                    removeScore(player, material);
-                    Score score = new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 1);
-                    score.setPrefix("&7Finde ");
-                    score.setSuffix("&7!");
-                    scoreboard.addScore(score);
+        if (!BingoPlugin.getTimer().isPaused()) {
+            CheckInventory.checkInventory(BingoList.bingoList.size());
+            for (String name : playerScoreboards.keySet()) {
+                Player player = Bukkit.getPlayer(name);
+                Scoreboard scoreboard = playerScoreboards.get(name);
+                List<String> scores = new ArrayList<String>();
+                for (Score score : scoreboard.getScores()) {
+                    scores.add(score.getContent());
                 }
+                for (Material material : BingoList.getBingoList(Objects.requireNonNull(player))) {
+                    if (BingoList.playerCollectedList.get(name).contains(material)) {
+                        removeScore(player, material);
+                        Objects.requireNonNull(SummarizerCore.getSummarization(player)).lockedItem(material);
+                        Score score = new Score(core.Utils.colorize("&a" + Utils.formatMaterialName(material)), -3);
+                        score.setSuffix("&7 gefunden!");
+                        scoreboard.addScore(score);
+                    } else if (player.getInventory().contains(material)) {
+                        removeScore(player, material);
+                        Objects.requireNonNull(SummarizerCore.getSummarization(player)).collectedItem(material);
+                        Score score = new Score(core.Utils.colorize("&b" + Utils.formatMaterialName(material)), 1);
+                        score.setPrefix("&7Sperre ");
+                        score.setSuffix("&7!");
+                        scoreboard.addScore(score);
+                    } else {
+                        removeScore(player, material);
+                        Score score = new Score(core.Utils.colorize("&c" + Utils.formatMaterialName(material)), 0);
+                        if (BingoList.contains(material) == 0) {
+                            score.setValue(0);
+                            score.setPrefix("(&aX&f) &7Finde ");
+                        } else if (BingoList.contains(material) == 1) {
+                            score.setValue(-1);
+                            score.setPrefix("(&6X&f) &7Finde ");
+                        } else if (BingoList.contains(material) == 2) {
+                            score.setValue(-2);
+                            score.setPrefix("(&cX&f) &7Finde ");
+                        }
+                        score.setSuffix("&7!");
+                        scoreboard.addScore(score);
+                    }
 
-                scoreboard.getTitles().set(1, core.Utils.colorize("Gefundene Items: &6" + BingoList.playerCollectedList.get(player.getDisplayName()).size() + "&7/&a" + core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")));
-                BingoInventory.updateInventory(player);
-            }
-            int i = 0;
-            for (Score score : scoreboard.getScores()) {
-                if (scores.contains(score.getContent())) {
-                    i++;
+                    scoreboard.getTitles().set(1, core.Utils.colorize("Gefundene Items: &6" + BingoList.playerCollectedList.get(player.getDisplayName()).size() + "&7/&a" + BingoList.bingoList.size()));
+                    BingoInventory.updateInventory(player);
                 }
-            }
-            if (i != core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings(), "Items")) {
-                startRender(player);
+                int i = 0;
+                for (Score score : scoreboard.getScores()) {
+                    if (scores.contains(score.getContent())) {
+                        i++;
+                    }
+                }
+                if (i != BingoList.bingoList.size()) {
+                    startRender(player);
+                }
             }
         }
     }
@@ -118,9 +132,9 @@ public class SideList {
         ScoreboardDisplay display = getScoreboardDisplay(player);
 
         if (scoreboard.getType().equals(ScoreboardType.STATIC_TITLE) || scoreboard.getType().equals(ScoreboardType.MULTI_TITLE)) {
-            display.renderScoreboard(scoreboard, scoreboard.getTitles().get(display.getTitleIndex()));
+            display.renderScoreboard();
             DebugSender.sendDebug(DebugType.GUI, "rendered sidelist", "Sidelist");
-        }else{
+        } else {
             System.err.println("could not start render of scoreboard because the ScoreBoardType is not STATIC_TITLE (bingo.SideList:126)");
         }
     }
@@ -130,11 +144,11 @@ public class SideList {
         playerScoreboardsDisplay.remove(player.getDisplayName());
     }
 
-    private static Scoreboard getScoreboard(Player player){
+    private static Scoreboard getScoreboard(Player player) {
         return playerScoreboards.get(player.getDisplayName());
     }
 
-    private static ScoreboardDisplay getScoreboardDisplay(Player player){
+    private static ScoreboardDisplay getScoreboardDisplay(Player player) {
         return playerScoreboardsDisplay.get(player.getDisplayName());
     }
 }

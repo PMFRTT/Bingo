@@ -79,11 +79,19 @@ public class BingoInventory {
             add(Utils.colorize("&fDas Item bleibt in"));
             add(Utils.colorize("&fdiesem Slot &cgesperrt!"));
             add(Utils.colorize("&fDu hast das Item nach &b" + Utils.formatTimerTimeTicksTwoDecimal(SummarizerCore.getSummarization(player).getFirstFoundTicks(material)) + "&f gefunden!"));
-            add(Utils.colorize("&8Shiftclick um das Item zu erhalten!"));
+            if (!core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
+                add(Utils.colorize("&8Shiftclick um das Item zu erhalten!"));
+            }else{
+                add(Utils.colorize("&fDieses Item hat dir &a" + Utils.formatTimerTimeTicksTwoDecimal(SummarizerCore.getSummarization(player).getSingleplayerTimeTicks(material)) + "&f gebracht!"));
+            }
         }};
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    public static ArrayList<Inventory> getInventories() {
+        return new ArrayList<Inventory>(getAllInventories().values());
     }
 
     public static ItemStack getBanned(Material material) {

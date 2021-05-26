@@ -36,12 +36,11 @@ public class BingoCommandExecutor implements CommandExecutor {
 
         if (command.getLabel().equalsIgnoreCase("Bingo")) {
             if (args.length == 0) {
-                if (!BingoPlugin.getTimer().isPaused()) {
-                    assert player != null;
+                assert player != null;
+                if (bingo.Utils.hasStarted) {
                     BingoInventory.updateInventory(player);
                     player.openInventory(BingoInventory.getPlayerInventory(player));
                 } else {
-                    assert player != null;
                     player.sendMessage(Utils.getPrefix("Bingo") + Utils.colorize("Das Bingo hat noch &cnicht begonnen&f!"));
                 }
             }
@@ -66,17 +65,21 @@ public class BingoCommandExecutor implements CommandExecutor {
                     Respawner.respawn(player);
                 } else if (args[0].equalsIgnoreCase("pause")) {
                     if (!BingoPlugin.getTimer().isPaused()) {
+                        core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, false);
                         BingoPlugin.getTimer().pause();
-                        for(Player player1 : Bukkit.getOnlinePlayers()){
+                        for (Player player1 : Bukkit.getOnlinePlayers()) {
                             core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&cPause!"), Utils.colorize("Das Bingo wurde &cpausiert&f!"));
                         }
                     }
-                }
-                else if (args[0].equalsIgnoreCase("resume")) {
+                } else if (args[0].equalsIgnoreCase("resume")) {
                     if (BingoPlugin.getTimer().isPaused()) {
-                        BingoPlugin.getTimer().resume();
-                        for(Player player1 : Bukkit.getOnlinePlayers()){
-                            core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&aWeiter!"), Utils.colorize("Das Bingo wurde &afortgesetzt&f!"));
+                        if (!core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
+
+                            core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, true);
+                            BingoPlugin.getTimer().resume();
+                            for (Player player1 : Bukkit.getOnlinePlayers()) {
+                                core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&aWeiter!"), Utils.colorize("Das Bingo wurde &afortgesetzt&f!"));
+                            }
                         }
                     }
                 }

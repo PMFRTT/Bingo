@@ -2,8 +2,12 @@ package bingo.eventhandler;
 
 import bingo.main.BingoInventory;
 import bingo.main.BingoList;
-import bingo.SideList;
+import bingo.main.BingoPlugin;
+import bingo.summarizer.SummarizerCore;
+import core.Utils;
+import core.core.CoreMain;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -11,40 +15,46 @@ import java.util.*;
 
 public class CheckInventory {
 
-    private static final int min = 60;
-    private static final int max = 180;
-    private static int multiplier;
+    private static final Integer EASY_MIN = 45;
+    private static final Integer EASY_MAX = 120;
 
-    public static List<Integer> alwaysLocked9 = new ArrayList<Integer>() {{
-        addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
-    }};
-    public static List<Integer> alwaysLocked18 = new ArrayList<Integer>() {{
-        addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23, 24, 25, 26));
-    }};
-    public static List<Integer> alwaysLocked27 = new ArrayList<Integer>() {{
-        addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23, 24, 25, 26, 36, 37, 38, 39, 40, 41, 42, 43, 44));
-    }};
+    private static final Integer MEDIUM_MIN = 150;
+    private static final Integer MEDIUM_MAX = 200;
+
+    private static final Integer HARD_MIN = 250;
+    private static final Integer HARD_MAX = 360;
 
     public static HashMap<String, List<Integer>> playerBans = new HashMap<String, List<Integer>>();
 
     private static final HashMap<String, ArrayList<Integer>> lockedSlots = new HashMap<String, ArrayList<Integer>>();
 
-    public static void checkInventory(Player player, int size) {
-        for (Integer i : getLockedSize(size)) {
-            Inventory inventory = BingoInventory.getPlayerInventory(player);
-            if (inventory.getItem(i + 9) != null) {
-                if (Objects.requireNonNull(inventory.getItem(i)).getType() == Objects.requireNonNull(inventory.getItem(i + 9)).getType()) {
-                    if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
-                        lockSlot(player, i + 9);
-                        BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
-                        inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType(), player));
-                        BingoInventory.updateInventory(player);
-                    }
-                } else {
-                    if (BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
-                        BingoList.removeMaterialFromCollected(player, Objects.requireNonNull(inventory.getItem(i).getType()));
-                        BingoInventory.updateInventory(player);
-                        unlockSlot(player, i + 9);
+    public static void checkInventory(int size) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (Integer i : createLockedList(size)) {
+                Inventory inventory = BingoInventory.getPlayerInventory(player);
+                if (inventory.getItem(i + 9) != null) {
+                    if (Objects.requireNonNull(inventory.getItem(i)).getType() == Objects.requireNonNull(inventory.getItem(i + 9)).getType()) {
+                        if (core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
+                            if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
+                                int j = getRandomTimerAddition(BingoList.contains(inventory.getItem(i).getType()));
+                                BingoPlugin.getTimer().addSeconds(j);
+                                CoreMain.hotbarManager.getHotbarScheduler(player).scheduleMessage(Utils.colorize("Du hast &a" + Utils.formatTimerTimeTicks(j * 20) + " &ferhalten"), 100);
+                                SummarizerCore.getSummarization(player).addSinglePlayerTime(inventory.getItem(i).getType(), j * 20);
+                            }
+                        }
+                        if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
+                            lockSlot(player, i + 9);
+                            BingoList.addMaterialToCollected(player, Objects.requireNonNull(inventory.getItem(i)).getType());
+                            inventory.setItem(i + 9, BingoInventory.convertToLocked(inventory.getItem(i).getType(), player));
+                            BingoInventory.updateInventory(player);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                        }
+                    } else {
+                        if (BingoList.playerCollectedList.get(player.getDisplayName()).contains(Objects.requireNonNull(inventory.getItem(i)).getType())) {
+                            BingoList.removeMaterialFromCollected(player, Objects.requireNonNull(inventory.getItem(i).getType()));
+                            BingoInventory.updateInventory(player);
+                            unlockSlot(player, i + 9);
+                        }
                     }
                 }
             }
@@ -64,18 +74,6 @@ public class CheckInventory {
         }
     }
 
-    public static List<Integer> getLockedSize(int size) {
-        switch (size) {
-            case 9:
-                return alwaysLocked9;
-            case 18:
-                return alwaysLocked18;
-            case 27:
-                return alwaysLocked27;
-        }
-        return null;
-    }
-
     public static void unlockSlot(Player player, int slot) {
         if (lockedSlots.get(player.getDisplayName()).contains((Integer) slot)) {
             lockedSlots.get(player.getDisplayName()).remove((Integer) slot);
@@ -86,19 +84,39 @@ public class CheckInventory {
         return lockedSlots.get(player.getDisplayName());
     }
 
-    private static void getMultiplier(int difficulty) {
+
+    private static int getRandomTimerAddition(Integer difficulty) {
+        Random random = new Random();
+        float multiplier = 0.5f * core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings().singlePlayerSubSettings, "Zeit-Multiplikator");
         switch (difficulty) {
             case 0:
-                multiplier = 1;
-                break;
+                double i = (random.nextInt(EASY_MAX - EASY_MIN) + EASY_MIN);
+                return (int) ( i * multiplier);
             case 1:
-                multiplier = 2;
-                break;
+                double j = (random.nextInt(MEDIUM_MAX - MEDIUM_MIN) + MEDIUM_MIN);
+                return (int) ( j * multiplier);
             case 2:
-                multiplier = 4;
-                break;
+                double k = (random.nextInt(HARD_MAX - HARD_MIN) + HARD_MIN);
+                return (int) ( k * multiplier);
         }
+        return 0;
     }
 
+    public static ArrayList<Integer> createLockedList(Integer size) {
+        if (0 < size && size <= 9) {
+            return new ArrayList<Integer>() {{
+                addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
+            }};
+        } else if (9 < size && size <= 18) {
+            return new ArrayList<Integer>() {{
+                addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23, 24, 25, 26));
+            }};
+        } else if (18 < size && size <= 27) {
+            return new ArrayList<Integer>() {{
+                addAll(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 18, 19, 20, 21, 22, 23, 24, 25, 26, 36, 37, 38, 39, 40, 41, 42, 43, 44));
+            }};
+        }
+        return null;
+    }
 
 }

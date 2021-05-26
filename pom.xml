@@ -78,9 +78,9 @@
         <dependency>
             <groupId>com.github.PMFRTT</groupId>
             <artifactId>Core</artifactId>
-            <version>16.5.32-dev</version>
+            <version>16.5.40-dev</version>
             <scope>system</scope>
-            <systemPath>C:\Code\Java\Bukkit\Core\target\Core-16.5.32-dev.jar</systemPath>
+            <systemPath>C:\Code\Java\Bukkit\Core\target\Core-16.5.40-dev.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

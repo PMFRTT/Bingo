@@ -47,7 +47,8 @@ public class Teleporter {
     }
 
     public static boolean canTP(Player player){
-        return playerCountdown.get(player.getDisplayName()).getTicks() == 0;
+        return true;
+        //return playerCountdown.get(player.getDisplayName()).getTicks() == 0;
     }
 
     public static void teleport(Player player){
@@ -56,7 +57,7 @@ public class Teleporter {
         teleporterTimer.resume();
         DebugSender.sendDebug(DebugType.PLUGIN, "player has been teleported", "Bingo");
         playerCountdown.put(player.getDisplayName(), teleporterTimer);
-        bingo.Utils.scatterPlayer(player, radius, false);
+        bingo.Utils.scatterPlayer(player, radius, false, true);
     }
 
     public static TeleporterTimer getTimer(Player player){

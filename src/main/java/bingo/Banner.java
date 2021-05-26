@@ -22,7 +22,8 @@ import static bingo.Utils.scatterPlayer;
 public class Banner {
 
     private static HashMap<String, Timer> playerTimers = new HashMap<String, Timer>();
-    private static HashMap<String, Integer> playerIndexTimers = new HashMap<String, Integer>();
+    private static final HashMap<String, Integer> playerIndexTimers = new HashMap<String, Integer>();
+    private static boolean isRunning = false;
 
     private static Plugin plugin;
 
@@ -53,13 +54,15 @@ public class Banner {
                         }
                     }
                 }
+                isRunning = !done;
                 if (done) {
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.closeInventory();
                         if (core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Scatter Players")) {
-                            scatterPlayer(player, scatterSize, true);
+                            scatterPlayer(player, scatterSize, true, false);
                         }
                     }
+                    isRunning = false;
                     cancel();
                 }
             }
@@ -76,6 +79,10 @@ public class Banner {
             return true;
         }
         return false;
+    }
+
+    public static boolean getRunning(){
+        return isRunning;
     }
 
 }
