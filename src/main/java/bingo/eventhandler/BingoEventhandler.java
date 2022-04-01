@@ -4,6 +4,7 @@ import bingo.*;
 import bingo.main.BingoInventory;
 import bingo.main.BingoList;
 import bingo.main.BingoPlugin;
+import com.sun.tools.javac.comp.Check;
 import core.core.CoreMain;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,10 +17,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import core.Utils;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Objects;
 
@@ -121,6 +125,47 @@ public class BingoEventhandler implements Listener {
                                 }
                                 e.setCancelled(true);
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onItemUse(PlayerInteractEvent e) {
+        if (!BingoPlugin.paused) {
+
+            Material material = e.getMaterial();
+            Player player = e.getPlayer();
+            PlayerInventory inventory = player.getInventory();
+
+            if (BingoList.getBingoList(player).contains(material)) {
+                if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(material)) {
+                    CheckInventory.addItem(material, player);
+                    inventory.getItemInMainHand().setAmount(inventory.getItemInMainHand().getAmount() - 1);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryCollect(InventoryClickEvent e) {
+        if (!BingoPlugin.paused) {
+
+            if (e.getClick().equals(ClickType.RIGHT)) {
+
+                ItemStack itemStack = e.getCurrentItem();
+                Material material = itemStack.getType();
+                Player player = (Player) e.getWhoClicked();
+                Inventory inventory = e.getClickedInventory();
+
+                if (inventory == player.getInventory() || inventory.getType().equals(InventoryType.CHEST)) {
+                    if (BingoList.getBingoList(player).contains(material)) {
+                        if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(material)) {
+                            e.setCancelled(true);
+                            CheckInventory.addItem(material, player);
+                            itemStack.setAmount(itemStack.getAmount() - 1);
                         }
                     }
                 }

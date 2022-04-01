@@ -22,6 +22,8 @@ public final class BingoPlugin extends JavaPlugin {
     public static SideList sideList;
     public static Respawner respawner;
 
+    public static boolean paused = true;
+
     @Override
     public void onEnable() {
 

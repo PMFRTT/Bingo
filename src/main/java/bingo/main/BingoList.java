@@ -174,14 +174,18 @@ public class BingoList {
         return playerBingoLists.get(player.getDisplayName());
     }
 
-    public static boolean completed(Player player) {
+    public static Player hasWon = null;
+
+    public static void completed(Player player) {
         int counter = 0;
         for (Material material : playerBingoLists.get(player.getDisplayName())) {
             if (playerCollectedList.get(player.getDisplayName()).contains(material)) {
                 counter++;
             }
         }
-        return counter == itemCount;
+        if(counter == itemCount){
+            hasWon = player;
+        }
     }
 
 }

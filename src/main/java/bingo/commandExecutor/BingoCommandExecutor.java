@@ -65,6 +65,7 @@ public class BingoCommandExecutor implements CommandExecutor {
                     Respawner.respawn(player);
                 } else if (args[0].equalsIgnoreCase("pause")) {
                     if (!BingoPlugin.getTimer().isPaused()) {
+                        BingoPlugin.paused = true;
                         core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, false);
                         BingoPlugin.getTimer().pause();
                         for (Player player1 : Bukkit.getOnlinePlayers()) {
@@ -74,7 +75,7 @@ public class BingoCommandExecutor implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("resume")) {
                     if (BingoPlugin.getTimer().isPaused()) {
                         if (!core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
-
+                            BingoPlugin.paused = false;
                             core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, true);
                             BingoPlugin.getTimer().resume();
                             for (Player player1 : Bukkit.getOnlinePlayers()) {

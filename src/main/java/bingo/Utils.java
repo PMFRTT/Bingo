@@ -6,7 +6,9 @@ import bingo.main.BingoList;
 import bingo.main.BingoPlugin;
 import bingo.summarizer.SummarizerCore;
 import bingo.teleporter.Teleporter;
+import com.sun.tools.javac.comp.Check;
 import core.core.CoreMain;
+import core.currency.Currency;
 import core.debug.DebugSender;
 import core.debug.DebugType;
 import core.hotbar.HotbarScheduler;
@@ -17,10 +19,8 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.graalvm.compiler.core.common.util.Util;
 
 import java.util.Random;
-import java.util.Vector;
 
 public class Utils {
 
@@ -51,42 +51,40 @@ public class Utils {
 
             @Override
             public void run() {
-                if (!BingoPlugin.getTimer().isPaused()) {
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        getFacing(player.getLocation());
-                        if (!BingoList.completed(player)) {
-                            BingoInventory.updateInventory(player);
-                            CheckInventory.checkInventory(BingoList.bingoList.size());
-                            SideList.updateScoreboard();
-                            if (core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
-                                if (BingoPlugin.getTimer().getTicks() <= 0) {
-                                    core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("Du hast das Bingo nach &c" + core.Utils.formatTimerTimeTicksTwoDecimal(SummarizerCore.getTimer().getTicks()) + "&f leider nicht geschafft!"));
-                                    core.Utils.playSoundForAll(Sound.ENTITY_ENDER_DRAGON_DEATH, 1f, .75f);
-                                    SummarizerCore.getTimer().pause();
-                                    for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                        player1.openInventory(BingoInventory.getPlayerInventory(player));
-                                    }
-                                }
-                            }
-                        } else {
-                            BingoPlugin.getTimer().pause();
-                            SummarizerCore.getTimer().pause();
-                            if (!core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
-                                core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(player) + " &fhat das Bingo in &a" + core.Utils.formatTimerTimeTicksThreeDecimal(BingoPlugin.getTimer().getTicks()) + "&f beendet!"));
-                            } else {
-                                core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(player) + " &fhat das Bingo in &a" + core.Utils.formatTimerTimeTicksThreeDecimal(SummarizerCore.getTimer().getTicks()) + "&f beendet!"));
-                                core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(player) + " &fhatte noch &a" + core.Utils.formatTimerTimeTicksThreeDecimal(BingoPlugin.getTimer().getTicks()) + "&f Zeit!"));
-                            }
-                            core.Utils.playSoundForAll(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
-                            for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                player1.openInventory(BingoInventory.getPlayerInventory(player));
+                if (!BingoPlugin.paused) {
+                    if (BingoList.hasWon == null) {
+                        if (core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
+                            if (BingoPlugin.getTimer().getTicks() <= 0) {
+                                core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("Du hast das Bingo nach &c" + core.Utils.formatTimerTimeTicksTwoDecimal(SummarizerCore.getTimer().getTicks()) + "&f leider nicht geschafft!"));
+                                core.Utils.playSoundForAll(Sound.ENTITY_ENDER_DRAGON_DEATH, 1f, .75f);
+                                SummarizerCore.getTimer().pause();
+
                             }
                         }
+                    } else {
+                        BingoPlugin.getTimer().pause();
+                        SummarizerCore.getTimer().pause();
+                        BingoPlugin.paused = true;
+                        if (!core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
+                            core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(BingoList.hasWon) + " &fhat das Bingo in &a" + core.Utils.formatTimerTimeTicksThreeDecimal(BingoPlugin.getTimer().getTicks()) + "&f beendet!"));
+                        } else {
+                            core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(BingoList.hasWon) + " &fhat das Bingo in &a" + core.Utils.formatTimerTimeTicksThreeDecimal(SummarizerCore.getTimer().getTicks()) + "&f beendet!"));
+                            core.Utils.sendMessageToEveryone(core.Utils.getPrefix("Bingo") + core.Utils.colorize("&e" + core.Utils.getDisplayName(BingoList.hasWon) + " &fhatte noch &a" + core.Utils.formatTimerTimeTicksThreeDecimal(BingoPlugin.getTimer().getTicks()) + "&f Zeit!"));
+                        }
+                        core.Utils.playSoundForAll(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1f, 1f);
                     }
                 }
             }
         }, 0L, 1);
+    }
 
+    public static void checkInventory() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+            @Override
+            public void run() {
+                CheckInventory.checkInventory();
+            }
+        }, 0, 1);
     }
 
     public static void scatterPlayer(Player player, int scatterSize, boolean fromSpawn, boolean facing) {
@@ -200,7 +198,10 @@ public class Utils {
             Teleporter teleporter = new Teleporter((BingoPlugin) main, true, core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings().teleporterSubSettings, "Countdown-Zeit"), core.Utils.getSettingValueInt(BingoPlugin.getBingoSettings().teleporterSubSettings, "Teleporter-Radius"));
             teleporter.init();
         }
+
         startCompletedChecker();
+        checkInventory();
+
         for (Player player : Bukkit.getOnlinePlayers()) {
 
             HotbarScheduler hotbarScheduler = CoreMain.hotbarManager.getHotbarScheduler(player);
@@ -216,6 +217,7 @@ public class Utils {
 
         BingoPlugin.getTimer().resume();
         SummarizerCore.getTimer().resume();
+        BingoPlugin.paused = false;
         hasStarted = true;
     }
 

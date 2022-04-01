@@ -6,7 +6,7 @@
 
     <groupId>Bingo</groupId>
     <artifactId>Bingo</artifactId>
-    <version>16.5.35</version>
+    <version>18.2.0-dev</version>
     <packaging>jar</packaging>
 
     <name>Bingo</name>
@@ -71,16 +71,16 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <artifactId>spigot</artifactId>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.PMFRTT</groupId>
             <artifactId>Core</artifactId>
-            <version>16.5.40-dev</version>
+            <version>18.2.0-dev</version>
             <scope>system</scope>
-            <systemPath>C:\Code\Java\Bukkit\Core\target\Core-16.5.40-dev.jar</systemPath>
+            <systemPath>C:\Code\Java\Bukkit\Core\target\Core-18.2.0-dev.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

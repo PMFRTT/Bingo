@@ -12,6 +12,7 @@
           <option name="outputLevel" value="DEBUG" />
           <option name="pluginUpdatePolicy" value="DEFAULT" />
           <option name="printErrorStackTraces" value="true" />
+          <option name="showDialogWithAdvancedSettings" value="false" />
           <option name="threads" />
           <option name="usePluginRegistry" value="true" />
           <option name="userSettingsFile" value="" />
@@ -24,7 +25,7 @@
           <option name="environmentProperties">
             <map />
           </option>
-          <option name="jreName" value="15" />
+          <option name="jreName" value="16" />
           <option name="mavenProperties">
             <map />
           </option>
