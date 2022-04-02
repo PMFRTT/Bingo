@@ -142,8 +142,10 @@ public class BingoEventhandler implements Listener {
 
             if (BingoList.getBingoList(player).contains(material)) {
                 if (!BingoList.playerCollectedList.get(player.getDisplayName()).contains(material)) {
-                    CheckInventory.addItem(material, player);
-                    inventory.getItemInMainHand().setAmount(inventory.getItemInMainHand().getAmount() - 1);
+                    if (!player.isSneaking()) {
+                        CheckInventory.addItem(material, player);
+                        inventory.getItemInMainHand().setAmount(inventory.getItemInMainHand().getAmount() - 1);
+                    }
                 }
             }
         }

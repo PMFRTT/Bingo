@@ -54,34 +54,9 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7wie viele &aeinfache Items &7jeder Spieler"));
             add(Utils.colorize("&7sammeln muss!"));
         }}, Material.LIME_WOOL, new ArrayList<Integer>() {{
-            add(0);
-            add(1);
-            add(2);
-            add(3);
-            add(4);
-            add(5);
-            add(6);
-            add(7);
-            add(8);
-            add(9);
-            add(10);
-            add(11);
-            add(12);
-            add(13);
-            add(14);
-            add(15);
-            add(16);
-            add(17);
-            add(18);
-            add(19);
-            add(20);
-            add(21);
-            add(22);
-            add(23);
-            add(24);
-            add(25);
-            add(26);
-            add(27);
+            for (int i = 0; i <= 27; i++) {
+                add(i);
+            }
         }});
 
         itemSubSettings.addSetting("Mittlere Items", new ArrayList<String>() {{
@@ -89,34 +64,9 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7wie viele &6mittlere Items &7jeder Spieler"));
             add(Utils.colorize("&7sammeln muss!"));
         }}, Material.ORANGE_WOOL, new ArrayList<Integer>() {{
-            add(0);
-            add(1);
-            add(2);
-            add(3);
-            add(4);
-            add(5);
-            add(6);
-            add(7);
-            add(8);
-            add(9);
-            add(10);
-            add(11);
-            add(12);
-            add(13);
-            add(14);
-            add(15);
-            add(16);
-            add(17);
-            add(18);
-            add(19);
-            add(20);
-            add(21);
-            add(22);
-            add(23);
-            add(24);
-            add(25);
-            add(26);
-            add(27);
+            for (int i = 0; i <= 27; i++) {
+                add(i);
+            }
         }});
 
         itemSubSettings.addSetting("Schwere Items", new ArrayList<String>() {{
@@ -124,34 +74,9 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7wie viele &cschwere Items &7jeder Spieler"));
             add(Utils.colorize("&7sammeln muss!"));
         }}, Material.RED_WOOL, new ArrayList<Integer>() {{
-            add(0);
-            add(1);
-            add(2);
-            add(3);
-            add(4);
-            add(5);
-            add(6);
-            add(7);
-            add(8);
-            add(9);
-            add(10);
-            add(11);
-            add(12);
-            add(13);
-            add(14);
-            add(15);
-            add(16);
-            add(17);
-            add(18);
-            add(19);
-            add(20);
-            add(21);
-            add(22);
-            add(23);
-            add(24);
-            add(25);
-            add(26);
-            add(27);
+            for (int i = 0; i <= 27; i++) {
+                add(i);
+            }
         }});
 
         this.addSetting("Keep Inventory", new ArrayList<String>() {{
@@ -206,16 +131,9 @@ public class BingoSettings extends PluginSettings {
             add(core.Utils.colorize("&7viel &6Zeit &7du in dem"));
             add(core.Utils.colorize("&7Singleplayer-Modus startest"));
         }}, Material.CLOCK, new ArrayList<Integer>() {{
-            add(60);
-            add(120);
-            add(180);
-            add(240);
-            add(300);
-            add(360);
-            add(420);
-            add(480);
-            add(540);
-            add(600);
+            for (int i = 60; i <= 600; i+=60) {
+                add(i);
+            }
         }}, new ArrayList<String>() {{
             add(Utils.colorize("&c1 Minute"));
             add(Utils.colorize("&c2 Minuten"));
@@ -293,7 +211,7 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&b1000 &fBlöcke"));
             add(Utils.colorize("&b1500 &fBlöcke"));
             add(Utils.colorize("&b2000 &fBlöcke"));
-            add(Utils.colorize("&b5000 Blöcke"));
+            add(Utils.colorize("&b5000 &fBlöcke"));
         }});
 
         this.addSetting("Items Bannen", new ArrayList<String>() {{
@@ -307,15 +225,9 @@ public class BingoSettings extends PluginSettings {
             add(Utils.colorize("&7Hier kannst du einstellen,"));
             add(Utils.colorize("&7wieviele Items ein Spieler &6bannen&7 kann"));
         }}, Material.CACTUS, new ArrayList<Integer>() {{
-            add(1);
-            add(2);
-            add(3);
-            add(4);
-            add(5);
-            add(6);
-            add(7);
-            add(8);
-            add(9);
+            for (int i = 1; i <= 9; i++) {
+                add(i);
+            }
         }}, new ArrayList<String>() {{
             add(Utils.colorize("&b1 &fItem"));
             add(Utils.colorize("&b2 &fItems"));
@@ -381,36 +293,18 @@ public class BingoSettings extends PluginSettings {
                 i += core.Utils.getSettingValueInt(itemSubSettings, "Mittlere Items");
                 i += core.Utils.getSettingValueInt(itemSubSettings, "Schwere Items");
 
-
-                if (i <= 27) {
-                    for (Setting setting : itemSubSettings.getSettingsList()) {
-                        if (setting.getType() == SettingsType.CYCLE) {
-                            SettingCycle settingCycle = (SettingCycle) setting;
-                            settingCycle.blockCycleUP(false, "BlockedUp");
-                            settingCycle.blockCycleDO(false, "blockedDown");
+                for (Setting setting : itemSubSettings.getSettingsList()) {
+                    if (setting.getType() == SettingsType.CYCLE) {
+                        SettingCycle settingCycle = (SettingCycle) setting;
+                        if (i < 27) {
+                            settingCycle.blockCycleUP(false);
+                            settingCycle.blockCycleDO(false);
+                        }else if(i == 27 && settingCycle.getValue() != 27){
+                            settingCycle.blockCycleUP(true);
+                            settingCycle.blockCycleDO(false);
                         }
-                    }
-                }
-                if (i > 0 && i <= 26) {
-                    for (Setting setting : itemSubSettings.getSettingsList()) {
-                        if (setting.getType() == SettingsType.CYCLE) {
-                            SettingCycle settingCycle = (SettingCycle) setting;
-                            if (setting.value == 0) {
-                                settingCycle.blockCycleDO(true, "blockedDown");
-                            } else {
-                                settingCycle.blockCycleDO(false, "blockedDown");
-                            }
-                        }
-                    }
-                }
-                if (i > 26) {
-                    for (Setting setting : itemSubSettings.getSettingsList()) {
-                        if (setting.getType() == SettingsType.CYCLE) {
-                            SettingCycle settingCycle = (SettingCycle) setting;
-                            settingCycle.blockCycleUP(true, "BlockedUp");
-                            if (setting.value == 0) {
-                                settingCycle.blockCycleDO(true, "blockedDown");
-                            }
+                        if(i > 0 && settingCycle.getValue() == 0){
+                            settingCycle.blockCycleDO(true);
                         }
                     }
                 }

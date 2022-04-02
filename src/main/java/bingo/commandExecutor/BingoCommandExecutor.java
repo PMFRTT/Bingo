@@ -74,13 +74,11 @@ public class BingoCommandExecutor implements CommandExecutor {
                     }
                 } else if (args[0].equalsIgnoreCase("resume")) {
                     if (BingoPlugin.getTimer().isPaused()) {
-                        if (!core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
-                            BingoPlugin.paused = false;
-                            core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, true);
-                            BingoPlugin.getTimer().resume();
-                            for (Player player1 : Bukkit.getOnlinePlayers()) {
-                                core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&aWeiter!"), Utils.colorize("Das Bingo wurde &afortgesetzt&f!"));
-                            }
+                        BingoPlugin.paused = false;
+                        core.Utils.changeGamerule(GameRule.DO_DAYLIGHT_CYCLE, true);
+                        BingoPlugin.getTimer().resume();
+                        for (Player player1 : Bukkit.getOnlinePlayers()) {
+                            core.core.CoreSendStringPacket.sendPacketToTitle(player1, Utils.colorize("&aWeiter!"), Utils.colorize("Das Bingo wurde &afortgesetzt&f!"));
                         }
                     }
                 }
