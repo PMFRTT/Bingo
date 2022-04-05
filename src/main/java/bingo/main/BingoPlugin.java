@@ -7,6 +7,7 @@ import bingo.commandExecutor.ResetCommandExecutor;
 import bingo.commandExecutor.TopCommandExecutor;
 import bingo.eventhandler.BingoEventhandler;
 import bingo.teleporter.Respawner;
+import core.core.CoreHandler;
 import core.core.CoreMain;
 import core.debug.DebugSender;
 import core.debug.DebugType;
@@ -32,7 +33,7 @@ public final class BingoPlugin extends JavaPlugin {
         bingo.Utils utils = new bingo.Utils(this);
         utils.init();
 
-        CoreMain.setPlugin(this);
+        CoreHandler.setGuestPlugin(this);
 
         BingoEventhandler bingoEventhandler = new BingoEventhandler(this);
         bingoEventhandler.initialize();

@@ -6,6 +6,7 @@ import bingo.main.BingoList;
 import bingo.main.BingoPlugin;
 import com.sun.tools.javac.comp.Check;
 import core.core.CoreMain;
+import core.hotbar.HotbarManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class BingoEventhandler implements Listener {
     public void onBlockBroken(BlockBreakEvent e1) {
         if (BingoPlugin.getTimer().isPaused()) {
             if (!e1.getPlayer().isOp()) {
-                CoreMain.hotbarManager.getHotbarScheduler(e1.getPlayer()).scheduleMessage(Utils.colorize("&cDu kannst die Welt nicht verändern solange das Bingo pausiert ist!"), 40);
+                HotbarManager.getHotbarScheduler(e1.getPlayer()).scheduleMessage(Utils.colorize("&cDu kannst die Welt nicht verändern solange das Bingo pausiert ist!"), 40);
                 e1.setCancelled(true);
             }
         }
@@ -55,7 +56,7 @@ public class BingoEventhandler implements Listener {
         if (BingoPlugin.getTimer().isPaused()) {
             if (!e2.getDamager().isOp()) {
                 if (e2.getDamager() instanceof Player) {
-                    CoreMain.hotbarManager.getHotbarScheduler((Player) e2.getDamager()).scheduleMessage(Utils.colorize("&cDu kannst die Welt nicht verändern solange das Bingo pausiert ist!"), 40);
+                    HotbarManager.getHotbarScheduler((Player) e2.getDamager()).scheduleMessage(Utils.colorize("&cDu kannst die Welt nicht verändern solange das Bingo pausiert ist!"), 40);
                 }
                 e2.setCancelled(true);
             }
@@ -178,8 +179,8 @@ public class BingoEventhandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        CoreMain.hotbarManager.getHotbarScheduler(e.getPlayer()).setTimer(BingoPlugin.getTimer());
-        CoreMain.hotbarManager.getHotbarScheduler(e.getPlayer()).startScheduler(true);
+        HotbarManager.getHotbarScheduler(e.getPlayer()).setTimer(BingoPlugin.getTimer());
+        HotbarManager.getHotbarScheduler(e.getPlayer()).startScheduler(true);
         if (!BingoPlugin.getTimer().isPaused()) {
             BingoPlugin.sideList.createPlayerScoreBoards();
             SideList.updateScoreboard();

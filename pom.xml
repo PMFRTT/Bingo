@@ -6,7 +6,7 @@
 
     <groupId>Bingo</groupId>
     <artifactId>Bingo</artifactId>
-    <version>18.2.0-dev</version>
+    <version>18.2.1-dev</version>
     <packaging>jar</packaging>
 
     <name>Bingo</name>
@@ -78,9 +78,9 @@
         <dependency>
             <groupId>com.github.PMFRTT</groupId>
             <artifactId>Core</artifactId>
-            <version>18.2.0-dev</version>
+            <version>18.2.1-dev</version>
             <scope>system</scope>
-            <systemPath>C:\Code\Java\Bukkit\Core\target\Core-18.2.0-dev.jar</systemPath>
+            <systemPath>C:\Code\Java\Bukkit\Core\target\Core-18.2.1-dev.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

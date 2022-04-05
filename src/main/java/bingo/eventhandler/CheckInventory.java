@@ -7,6 +7,7 @@ import bingo.main.BingoPlugin;
 import bingo.summarizer.SummarizerCore;
 import core.Utils;
 import core.core.CoreMain;
+import core.hotbar.HotbarManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -48,7 +49,7 @@ public class CheckInventory {
                                 if (core.Utils.getSettingValueBool(BingoPlugin.getBingoSettings(), "Singleplayer")) {
                                     int j = getRandomTimerAddition(BingoList.contains(inventory.getItem(i).getType()));
                                     BingoPlugin.getTimer().addSeconds(j);
-                                    CoreMain.hotbarManager.getHotbarScheduler(player).scheduleMessage(Utils.colorize("Du hast &a" + Utils.formatTimerTimeTicks(j * 20) + " &ferhalten"), 100);
+                                    HotbarManager.getHotbarScheduler(player).scheduleMessage(Utils.colorize("Du hast &a" + Utils.formatTimerTimeTicks(j * 20) + " &ferhalten"), 100);
                                     SummarizerCore.getSummarization(player).addSinglePlayerTime(inventory.getItem(i).getType(), j * 20);
                                 }
                                 lockSlot(player, i + 9);

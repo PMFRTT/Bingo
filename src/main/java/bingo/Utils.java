@@ -9,6 +9,7 @@ import bingo.teleporter.Teleporter;
 import core.core.CoreMain;
 import core.debug.DebugSender;
 import core.debug.DebugType;
+import core.hotbar.HotbarManager;
 import core.hotbar.HotbarScheduler;
 import core.timer.Timer;
 import core.timer.TimerType;
@@ -35,7 +36,7 @@ public class Utils {
         BingoPlugin.setTimer(new Timer(main, TimerType.INCREASING, "Das Bingo läuft seit: &b", "&cDas Bingo ist pausiert", false));
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            HotbarScheduler hotbarScheduler = CoreMain.hotbarManager.getHotbarScheduler(player);
+            HotbarScheduler hotbarScheduler = HotbarManager.getHotbarScheduler(player);
 
             hotbarScheduler.setTimer(BingoPlugin.getTimer());
             hotbarScheduler.startScheduler(false);
@@ -209,7 +210,7 @@ public class Utils {
 
             for (Player player : Bukkit.getOnlinePlayers()) {
 
-                HotbarScheduler hotbarScheduler = CoreMain.hotbarManager.getHotbarScheduler(player);
+                HotbarScheduler hotbarScheduler = HotbarManager.getHotbarScheduler(player);
                 hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Verwende &c/bingo respawn&f um an dem Ort deines Todes zu spawnen!"), 24000, 250, 4000);
                 hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Mit &6/top&f kannst du aus einer Höhle an die Oberfläche kommen!"), 24000, 250, 8000);
                 hotbarScheduler.scheduleRepeatingMessage(core.Utils.colorize("Du brauchst eine Pause? Verwende &a/bingo pause&f um das Bingo zu pausieren!"), 24000, 250, 12000);
